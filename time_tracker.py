@@ -1,6 +1,8 @@
-import sys
+import sys 
 import json
 import time
+import io
+import os
 
 def checkCommandName():
     return sys.argv[1].lower() != 'start' and sys.argv[1].lower() != 'finish'
@@ -19,17 +21,40 @@ elif len(sys.argv) == 3:
 
 print(sys.argv[1] + "ing ", sys.argv[2] + "...")
 
-with open('data.json') as json_file:
-    data = json.load(json_file)
+if os.path.isfile('C:/Users/Hyunjeong Choi/source/repos/time_tracker_python/data.json') and os.access('C:/Users/Hyunjeong Choi/source/repos/time_tracker_python/data.json', os.R_OK):
+    # checks if file exists
+    print ("File exists and is readable")
+    # read json
+    with open('data.json') as json_file:
+        data = json.load(json_file)
+    
+        dest = {
+            sys.argv[2]: [
+                {
+                    sys.argv[1] : time.time()
+                }
+            ]
+        }
+        data["tasks"].update(dest)
 
-    dest = {
-        sys.argv[2]: [
-            {
-                sys.argv[1] : time.time()
-            }
-        ]
+    with open('data.json', 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=4)
+
+else:
+    print ("Either file is missing or is not readable, creating file...")
+    # create a file
+    with io.open(os.path.join('C:/Users/Hyunjeong Choi/source/repos/time_tracker_python', 'data.json'), 'w') as json_file:
+        json_file.write(json.dumps({}))
+
+    info = {
+        "tasks":{
+            sys.argv[2]: [
+                {
+                    sys.argv[1] : time.time()
+                }
+            ]
+        }
     }
-    data['tasks'].update(dest)
 
-with open('data.json', 'w', encoding='utf-8') as f:
-    json.dump(data, f, ensure_ascii=False, indent=4)
+    with open('data.json', 'w') as json_file:
+        json.dump(info, json_file)
