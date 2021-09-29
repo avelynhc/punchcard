@@ -21,25 +21,28 @@ elif len(sys.argv) == 3:
 
 print(sys.argv[1] + "ing ", sys.argv[2] + "...")
 
+# checks if file exists
 if os.path.isfile('C:/Users/Hyunjeong Choi/source/repos/time_tracker_python/data.json') and os.access('C:/Users/Hyunjeong Choi/source/repos/time_tracker_python/data.json', os.R_OK):
-    # checks if file exists
     print ("File exists and is readable")
     # read json
     with open('data.json') as json_file:
         data = json.load(json_file)
+
+        for x in data["tasks"]:
+            if x == sys.argv[2]:
+                sys.exit('You already started this project')
+
+        with open('data.json', 'w', encoding='utf-8') as f:
+            dest = {
+                sys.argv[2]: [
+                    {
+                        sys.argv[1] : time.time()
+                    }
+                ]
+            }
+            data["tasks"].update(dest)
+            json.dump(data, f, ensure_ascii=False, indent=2)
     
-        dest = {
-            sys.argv[2]: [
-                {
-                    sys.argv[1] : time.time()
-                }
-            ]
-        }
-        data["tasks"].update(dest)
-
-    with open('data.json', 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=4)
-
 else:
     print ("Either file is missing or is not readable, creating file...")
     # create a file
