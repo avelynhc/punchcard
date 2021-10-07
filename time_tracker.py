@@ -3,10 +3,8 @@ import json
 import time
 import os
 
-
 def check_command_name():
     return sys.argv[1].lower() != 'start' and sys.argv[1].lower() != 'finish'
-
 
 def has_duplicate_task(task, task_name):
     for x in task:
@@ -42,26 +40,29 @@ if os.path.isfile(filePath) and os.access(filePath, os.R_OK):
     with open(filePath) as json_file:
         data = json.load(json_file)
     if sys.argv[1] == 'start':
-            if has_duplicate_task(data["tasks"], sys.argv[2]):
-                sys.exit('You already started this project')
+        if has_duplicate_task(data["tasks"], sys.argv[2]):
+            sys.exit('You already started this project')
 
-            with open(filePath, 'w', encoding='utf-8') as f:
-                dest = {
-                    sys.argv[2]: [
-                        {
-                            sys.argv[1]: time.time()
-                        }
-                    ]
-                }
-                data["tasks"].update(dest)
-                json.dump(data, f, ensure_ascii=False, indent=2)
+        with open(filePath, 'w', encoding='utf-8') as f:
+            dest = {
+                sys.argv[2]: [
+                    {
+                        sys.argv[1]: time.time()
+                    }
+                ]
+            }
+            data["tasks"].update(dest)
+            json.dump(data, f, ensure_ascii=False, indent=2)
     elif sys.argv[1] == 'finish':
         if has_duplicate_task(data["tasks"], sys.argv[2]):
-            # print(data["tasks"]["watermelon"][0])
-            if has_finish(data["tasks"]["watermelon"],sys.argv[1]):
+            if has_finish(data["tasks"][sys.argv[2]],sys.argv[1]):
                 sys.exit("You do not have unfinished project named " + sys.argv[2])
             else:
                 print("adding finishing time")
+                with open(filePath, 'w', encoding='utf-8') as f:
+                    last_index = len(data["tasks"][sys.argv[2]]) - 1
+                    data["tasks"][sys.argv[2]][last_index][sys.argv[1]] = time.time()
+                    json.dump(data, f, ensure_ascii=False, indent=2)
 
         else:
             sys.exit("You do not have unfinished project named " + sys.argv[2])
