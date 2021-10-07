@@ -3,8 +3,10 @@ import json
 import time
 import os
 
+
 def check_command_name():
     return sys.argv[1].lower() != 'start' and sys.argv[1].lower() != 'finish'
+
 
 def has_duplicate_task(task, task_name):
     for x in task:
@@ -12,11 +14,13 @@ def has_duplicate_task(task, task_name):
             return True
     return False
 
+
 def has_finish(task, finish):
     for x in task:
         if finish not in x: 
             return False
     return True
+
 
 if len(sys.argv) == 1:
     print('you must pass 2 arguments')
