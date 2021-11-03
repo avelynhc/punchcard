@@ -45,18 +45,26 @@ if os.path.isfile(filePath) and os.access(filePath, os.R_OK):
         data = json.load(json_file)
     if sys.argv[1] == 'start':
         if has_duplicate_task(data["tasks"], sys.argv[2]):
-            sys.exit('You already started this project')
+            if has_finish(data["tasks"][sys.argv[2]],sys.argv[1]):
+                with open(filePath, 'w', encoding='utf-8') as f:
+                    data["tasks"][sys.argv[2]].append({sys.argv[1]: time.time()})
+                    json.dump(data, f, ensure_ascii=False, indent=2)
+                
+            else:
+                sys.exit('You already started this project')
 
-        with open(filePath, 'w', encoding='utf-8') as f:
-            dest = {
-                sys.argv[2]: [
-                    {
-                        sys.argv[1]: time.time()
-                    }
-                ]
-            }
-            data["tasks"].update(dest)
-            json.dump(data, f, ensure_ascii=False, indent=2)
+        else:
+            with open(filePath, 'w', encoding='utf-8') as f:
+                dest = {
+                    sys.argv[2]: [
+                        {
+                            sys.argv[1]: time.time()
+                        }
+                    ]
+                }
+                data["tasks"].update(dest)
+                json.dump(data, f, ensure_ascii=False, indent=2)
+
     elif sys.argv[1] == 'finish':
         if has_duplicate_task(data["tasks"], sys.argv[2]):
             if has_finish(data["tasks"][sys.argv[2]],sys.argv[1]):
