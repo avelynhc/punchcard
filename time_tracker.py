@@ -5,7 +5,7 @@ import os
 
 
 def check_command_name():
-    return sys.argv[1].lower() != 'start' and sys.argv[1].lower() != 'finish'
+    return sys.argv[1].lower() != 'start' and sys.argv[1].lower() != 'finish' and sys.argv[1].lower() != 'cancel'
 
 
 def has_duplicate_task(task, task_name):
@@ -79,6 +79,17 @@ if os.path.isfile(filePath) and os.access(filePath, os.R_OK):
         else:
             sys.exit("You do not have unfinished project named " + sys.argv[2])
 
+    elif sys.argv[1] == 'cancel':
+        # with open(filePath, 'w', encoding='utf-8') as f:
+            if has_finish(data["tasks"][sys.argv[2]],"finish") == False:
+                for x in list(data["tasks"]):
+                    if sys.argv[2] in x:
+                        data["tasks"].pop(x)
+                        json.dump(data, open(filePath,'w'),indent=2)
+                        sys.exit("Found")
+                sys.exit("Project Not Found")
+            else:
+                sys.exit("Not Authorized")
 
 else:
     print("Either file is missing or is not readable, creating file...")
