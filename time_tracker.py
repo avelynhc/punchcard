@@ -84,7 +84,7 @@ if os.path.isfile(filePath) and os.access(filePath, os.R_OK):
             if has_finish(data["tasks"][sys.argv[2]],"finish") == False:
                 for x in list(data["tasks"]):
                     if sys.argv[2] in x:
-                        data["tasks"].pop(x)
+                        data["tasks"][sys.argv[2]].pop()
                         json.dump(data, open(filePath,'w'),indent=2)
                         sys.exit("Found")
                 sys.exit("Project Not Found")
