@@ -2,8 +2,6 @@ import sys
 import json
 import time
 import os
-import datetime
-from datetime import timedelta
 
 
 def check_command_name():
@@ -30,6 +28,13 @@ def cancel_task(task,cancel_item):
             task[cancel_item].pop()
             json.dump(data, open(filePath,'w'),indent=2)
             sys.exit("Found")
+
+
+def convertTime(time):
+    sec = (time/1000)%60
+    min = (time/(1000*60))%60
+    hr = (time/(1000*60*60))%24
+    return int(sec),int(min),int(hr)
 
 
 if len(sys.argv) == 1:
@@ -98,15 +103,13 @@ if os.path.isfile(filePath) and os.access(filePath, os.R_OK):
 
     elif sys.argv[1] == 'get':
         if has_finish(data["tasks"][sys.argv[2]],"finish"):  
-            time_diff = timedelta()
+            timeDiff = 0
             for x in data["tasks"][sys.argv[2]]:
-                finish = float(x["finish"])/1000
-                start = float(x["start"])/1000
-
-                finish = datetime.datetime.fromtimestamp(finish)
-                start = datetime.datetime.fromtimestamp(start)
-                time_diff = finish - start
-            print(str(time_diff.days) + "days", str(time_diff.seconds//3600) + "hour(s)", str((time_diff.seconds//60)%60) + "minute(s)")
+                startTime = x["start"]*1000
+                finishTime = x["finish"]*1000
+                timeDiff += finishTime - startTime
+            sec, min, hr = convertTime(int(timeDiff))
+            print("{} hr {} min {} sec".format(hr, min, sec))
 
         else:
             sys.exit("You have not finished project named " + sys.argv[2])
