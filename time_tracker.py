@@ -2,10 +2,12 @@ import sys
 import json
 import time
 import os
+import datetime
+from datetime import timedelta
 
 
 def check_command_name():
-    return sys.argv[1].lower() != 'start' and sys.argv[1].lower() != 'finish' and sys.argv[1].lower() != 'cancel'
+    return sys.argv[1].lower() != 'start' and sys.argv[1].lower() != 'finish' and sys.argv[1].lower() != 'cancel' and sys.argv[1].lower() != 'get'
 
 
 def has_duplicate_task(task, task_name):
@@ -20,6 +22,14 @@ def has_finish(task, finish):
         if finish not in x: 
             return False
     return True
+
+
+def cancel_task(task,cancel_item):
+    for x in list(task):
+        if cancel_item in x:
+            task[cancel_item].pop()
+            json.dump(data, open(filePath,'w'),indent=2)
+            sys.exit("Found")
 
 
 if len(sys.argv) == 1:
@@ -80,16 +90,27 @@ if os.path.isfile(filePath) and os.access(filePath, os.R_OK):
             sys.exit("You do not have unfinished project named " + sys.argv[2])
 
     elif sys.argv[1] == 'cancel':
-        # with open(filePath, 'w', encoding='utf-8') as f:
-            if has_finish(data["tasks"][sys.argv[2]],"finish") == False:
-                for x in list(data["tasks"]):
-                    if sys.argv[2] in x:
-                        data["tasks"][sys.argv[2]].pop()
-                        json.dump(data, open(filePath,'w'),indent=2)
-                        sys.exit("Found")
-                sys.exit("Project Not Found")
-            else:
-                sys.exit("Not Authorized")
+        if has_finish(data["tasks"][sys.argv[2]],"finish") == False:
+            cancel_task(data["tasks"],sys.argv[2])
+            sys.exit("Project Not Found")
+        else:
+            sys.exit("Not Authorized")
+
+    elif sys.argv[1] == 'get':
+        if has_finish(data["tasks"][sys.argv[2]],"finish"):  
+            time_diff = timedelta()
+            for x in data["tasks"][sys.argv[2]]:
+                finish = float(x["finish"])/1000
+                start = float(x["start"])/1000
+
+                finish = datetime.datetime.fromtimestamp(finish)
+                start = datetime.datetime.fromtimestamp(start)
+                time_diff = finish - start
+            print(str(time_diff.days) + "days", str(time_diff.seconds//3600) + "hour(s)", str((time_diff.seconds//60)%60) + "minute(s)")
+
+        else:
+            sys.exit("You have not finished project named " + sys.argv[2])
+
 
 else:
     print("Either file is missing or is not readable, creating file...")
