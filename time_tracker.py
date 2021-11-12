@@ -2,10 +2,17 @@ import sys
 import json
 import time
 import os
+import argparse
 
+parser = argparse.ArgumentParser()
+parser.add_argument('x', type=str, help='Action')
+parser.add_argument('y', type=str, help='Name of task')
+parser.add_argument('--date', type=str, required=True)
+args = parser.parse_args()
+print('Hello,', args.date)
 
 def check_command_name():
-    return sys.argv[1].lower() != 'start' and sys.argv[1].lower() != 'finish' and sys.argv[1].lower() != 'cancel' and sys.argv[1].lower() != 'get'
+    return args.x.lower() != 'start' and args.x.lower() != 'finish' and args.x.lower() != 'cancel' and args.x.lower() != 'get'
 
 
 def has_duplicate_task(task, task_name):
@@ -36,20 +43,20 @@ def convertTime(time):
     hr = (time/(1000*60*60))%24
     return int(sec),int(min),int(hr)
 
-
+# check arguments
 if len(sys.argv) == 1:
     print('you must pass 2 arguments')
     sys.exit()
 elif len(sys.argv) == 2:
     if check_command_name():
-        sys.exit('it must be start or finish')
+        sys.exit('it must be start,finish or get')
     else:
         sys.exit('it must have project name')
 elif len(sys.argv) == 3:
     if check_command_name():
-        sys.exit('it must be start or finish')
+        sys.exit('it must be start,finish or get')
 
-print(sys.argv[1] + "ing ", sys.argv[2] + "...")
+print(args.x + "ing ", args.y + "...")
 
 # checks if file exists
 filePath = os.path.join(sys.path[0], 'data.json')
@@ -58,11 +65,11 @@ if os.path.isfile(filePath) and os.access(filePath, os.R_OK):
     # read json
     with open(filePath) as json_file:
         data = json.load(json_file)
-    if sys.argv[1] == 'start':
-        if has_duplicate_task(data["tasks"], sys.argv[2]):
-            if has_finish(data["tasks"][sys.argv[2]],sys.argv[1]):
+    if args.x == 'start':
+        if has_duplicate_task(data["tasks"], args.y):
+            if has_finish(data["tasks"][args.y],args.x):
                 with open(filePath, 'w', encoding='utf-8') as f:
-                    data["tasks"][sys.argv[2]].append({sys.argv[1]: time.time()})
+                    data["tasks"][args.y].append({args.x: time.time()})
                     json.dump(data, f, ensure_ascii=False, indent=2)
                 
             else:
@@ -71,57 +78,61 @@ if os.path.isfile(filePath) and os.access(filePath, os.R_OK):
         else:
             with open(filePath, 'w', encoding='utf-8') as f:
                 dest = {
-                    sys.argv[2]: [
+                    args.y: [
                         {
-                            sys.argv[1]: time.time()
+                            args.x: time.time()
                         }
                     ]
                 }
                 data["tasks"].update(dest)
                 json.dump(data, f, ensure_ascii=False, indent=2)
 
-    elif sys.argv[1] == 'finish':
-        if has_duplicate_task(data["tasks"], sys.argv[2]):
-            if has_finish(data["tasks"][sys.argv[2]],sys.argv[1]):
-                sys.exit("You do not have unfinished project named " + sys.argv[2])
+    elif args.x == 'finish':
+        if has_duplicate_task(data["tasks"], args.y):
+            if has_finish(data["tasks"][args.y],args.x):
+                sys.exit("You do not have unfinished project named " + args.y)
             else:
                 print("adding finishing time")
                 with open(filePath, 'w', encoding='utf-8') as f:
-                    last_index = len(data["tasks"][sys.argv[2]]) - 1
-                    data["tasks"][sys.argv[2]][last_index][sys.argv[1]] = time.time()
+                    last_index = len(data["tasks"][args.y]) - 1
+                    data["tasks"][args.y][last_index][args.x] = time.time()
                     json.dump(data, f, ensure_ascii=False, indent=2)
 
         else:
-            sys.exit("You do not have unfinished project named " + sys.argv[2])
+            sys.exit("You do not have unfinished project named " + args.y)
 
-    elif sys.argv[1] == 'cancel':
-        if has_finish(data["tasks"][sys.argv[2]],"finish") == False:
-            cancel_task(data["tasks"],sys.argv[2])
+    elif args.x == 'cancel':
+        if has_finish(data["tasks"][args.y],"finish") == False:
+            cancel_task(data["tasks"],args.y)
             sys.exit("Project Not Found")
         else:
             sys.exit("Not Authorized")
 
-    elif sys.argv[1] == 'get':
-        if has_finish(data["tasks"][sys.argv[2]],"finish"):  
+    elif args.x == 'get':
+        if has_finish(data["tasks"][args.y],"finish"):  
             timeDiff = 0
-            for x in data["tasks"][sys.argv[2]]:
+            for x in data["tasks"][args.y]:
                 startTime = x["start"]*1000
                 finishTime = x["finish"]*1000
                 timeDiff += finishTime - startTime
+                # if sys.argv[3] in (startTime,finishTime):
+                #     print("data exists in between")
+                # else:
+                #     print("can't find")
             sec, min, hr = convertTime(int(timeDiff))
             print("{} hr {} min {} sec".format(hr, min, sec))
 
         else:
-            sys.exit("You have not finished project named " + sys.argv[2])
+            sys.exit("You have not finished project named " + args.y)
 
 
 else:
     print("Either file is missing or is not readable, creating file...")
     info = {
         "tasks": {
-            sys.argv[2]: [
+            args.y: [
                 {
-                    sys.argv[1]: time.time()
+                    args.x: time.time()
                 }
             ]
         }
