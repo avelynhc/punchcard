@@ -3,21 +3,29 @@ import json
 import time
 import os
 import argparse
+import datetime
 
 parser = argparse.ArgumentParser()
 parser.add_argument('x', type=str, help='Action')
 parser.add_argument('y', type=str, help='Name of task')
-parser.add_argument('--date', type=str, required=True)
+parser.add_argument('--From', type=str)
+parser.add_argument('--To', type=str)
 args = parser.parse_args()
-print('Hello,', args.date)
+if args.From and args.To:
+    print('You want to display data from', args.From, 'to', args.To)
+Fromtimestamp = datetime.datetime.strptime(args.From, "%Y/%m/%d").timestamp()
+Totimestamp = datetime.datetime.strptime(args.To, "%Y/%m/%d").timestamp()
+print(Fromtimestamp)
+print(Totimestamp)
+
 
 def check_command_name():
     return args.x.lower() != 'start' and args.x.lower() != 'finish' and args.x.lower() != 'cancel' and args.x.lower() != 'get'
 
 
-def has_duplicate_task(task, task_name):
-    for x in task:
-        if x == task_name:
+def has_duplicate_task(tasks, task_name):
+    for task in tasks:
+        if task == task_name:
             return True
     return False
 
@@ -56,7 +64,7 @@ elif len(sys.argv) == 3:
     if check_command_name():
         sys.exit('it must be start,finish or get')
 
-print(args.x + "ing ", args.y + "...")
+print(args.x + "ing",args.y + "...")
 
 # checks if file exists
 filePath = os.path.join(sys.path[0], 'data.json')
@@ -111,16 +119,16 @@ if os.path.isfile(filePath) and os.access(filePath, os.R_OK):
     elif args.x == 'get':
         if has_finish(data["tasks"][args.y],"finish"):  
             timeDiff = 0
-            for x in data["tasks"][args.y]:
-                startTime = x["start"]*1000
-                finishTime = x["finish"]*1000
-                timeDiff += finishTime - startTime
-                # if sys.argv[3] in (startTime,finishTime):
-                #     print("data exists in between")
-                # else:
-                #     print("can't find")
-            sec, min, hr = convertTime(int(timeDiff))
-            print("{} hr {} min {} sec".format(hr, min, sec))
+            for task in data["tasks"][args.y]:
+                if task["start"] >= Fromtimestamp and Totimestamp >= task["finish"]:
+                    startTime = task["start"]*1000
+                    finishTime = task["finish"]*1000
+                    timeDiff += finishTime - startTime
+            if timeDiff > 0:
+                sec, min, hr = convertTime(int(timeDiff))
+                print("{} hr {} min {} sec".format(hr, min, sec))
+            else:
+                sys.exit("You have no data available between two values")
 
         else:
             sys.exit("You have not finished project named " + args.y)
