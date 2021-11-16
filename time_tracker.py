@@ -3,7 +3,7 @@ import json
 import time
 import os
 import argparse
-import datetime
+from datetime import datetime
 
 parser = argparse.ArgumentParser()
 parser.add_argument('x', type=str, help='Action')
@@ -13,10 +13,10 @@ parser.add_argument('--To', type=str)
 args = parser.parse_args()
 if args.From and args.To:
     print('You want to display data from', args.From, 'to', args.To)
-Fromtimestamp = datetime.datetime.strptime(args.From, "%Y/%m/%d").timestamp()
-Totimestamp = datetime.datetime.strptime(args.To, "%Y/%m/%d").timestamp()
-print(Fromtimestamp)
-print(Totimestamp)
+Fromtimestamp = datetime.strptime(args.From, "%Y/%m/%d").replace(hour=12,minute=0)
+Totimestamp = datetime.strptime(args.To, "%Y/%m/%d").replace(hour=23,minute=59,second=59)
+print("Fromtimestamp:", Fromtimestamp)
+print("Totimestamp:", Totimestamp)
 
 
 def check_command_name():
@@ -120,7 +120,7 @@ if os.path.isfile(filePath) and os.access(filePath, os.R_OK):
         if has_finish(data["tasks"][args.y],"finish"):  
             timeDiff = 0
             for task in data["tasks"][args.y]:
-                if task["start"] >= Fromtimestamp and Totimestamp >= task["finish"]:
+                if datetime.fromtimestamp(task["start"]) >= Fromtimestamp and Totimestamp >= datetime.fromtimestamp(task["finish"]):
                     startTime = task["start"]*1000
                     finishTime = task["finish"]*1000
                     timeDiff += finishTime - startTime
