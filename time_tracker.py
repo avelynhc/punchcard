@@ -13,10 +13,11 @@ parser.add_argument('--To', type=str)
 args = parser.parse_args()
 if args.From and args.To:
     print('You want to display data from', args.From, 'to', args.To)
-Fromtimestamp = datetime.strptime(args.From, "%Y/%m/%d").replace(hour=12,minute=0)
-Totimestamp = datetime.strptime(args.To, "%Y/%m/%d").replace(hour=23,minute=59,second=59)
-print("Fromtimestamp:", Fromtimestamp)
-print("Totimestamp:", Totimestamp)
+if args.x.lower() == 'get':
+    Fromtimestamp = datetime.strptime(args.From, "%Y/%m/%d").replace(hour=12,minute=0)
+    Totimestamp = datetime.strptime(args.To, "%Y/%m/%d").replace(hour=23,minute=59,second=59)
+    print("Fromtimestamp:", Fromtimestamp)
+    print("Totimestamp:", Totimestamp)
 
 
 def check_command_name():
