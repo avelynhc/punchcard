@@ -31,13 +31,13 @@ def has_duplicate_task(tasks, task_name):
     return False
 
 
-def has_finish(task, finish):
-    for x in task:
-        if finish not in x: 
+def has_finish(tasks, finish):
+    for task in tasks:
+        if finish not in task: 
             return False
     return True
 
-
+# cancel_task(data["tasks"],args.y)
 def cancel_task(task,cancel_item):
     for x in list(task):
         if cancel_item in x:
@@ -76,7 +76,7 @@ if os.path.isfile(filePath) and os.access(filePath, os.R_OK):
         data = json.load(json_file)
     if args.x == 'start':
         if has_duplicate_task(data["tasks"], args.y):
-            if has_finish(data["tasks"][args.y],args.x):
+            if has_finish(data["tasks"][args.y],"finish"):
                 with open(filePath, 'w', encoding='utf-8') as f:
                     data["tasks"][args.y].append({args.x: time.time()})
                     json.dump(data, f, ensure_ascii=False, indent=2)
