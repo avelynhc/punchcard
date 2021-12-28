@@ -14,14 +14,14 @@ class TestRecordClass(unittest.TestCase):
     def test_start_only_initialization(self):
         test_record = TaskRecord(12)
 
-        self.assertEqual(test_record.start, 12.12)
+        self.assertEqual(test_record.start, 12)
         self.assertEqual(test_record.finished, None)
 
     def test_get_duration(self):
         test_record = TaskRecord(12, 24)
         duration = test_record.get_duration()
 
-        self.assertEqual(duration, 12.12)
+        self.assertEqual(duration, 12)
 
     def test_start_only_get_duration(self):
         test_record = TaskRecord(12)

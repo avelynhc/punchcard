@@ -46,6 +46,7 @@ class TestTaskListClass(unittest.TestCase):
         with self.assertRaises(Exception) as context:
             test_task_list = TaskList()
             test_task_list.start_new_task()
+            test_task_list.start_new_task()
         self.assertTrue(TaskList.start_err_msg in str(context.exception))
 
     def test_finish_task(self):
@@ -74,7 +75,6 @@ class TestTaskListClass(unittest.TestCase):
         test_task_list = TaskList()
         test_task_list.start_new_task()
         test_task_list.finish_task()
-
         with self.assertRaises(Exception) as context:
             test_task_list.cancel_task()
         self.assertTrue(TaskList.cancel_err_message in str(context.exception))
