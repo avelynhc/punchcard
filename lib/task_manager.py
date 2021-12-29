@@ -1,5 +1,4 @@
 from typing import Dict
-import json
 
 from lib.task_list import TaskList
 
@@ -10,22 +9,18 @@ class TaskManager:
     task_not_found_msg = "Error: no task named {} found"
     cancel_success_msg = "successfully cancelled {}"
 
-    data_file_path: str
     tasks: Dict[str, TaskList]
 
-    def read_data(self):
+    def __init__(self, json_data=None):
         self.tasks = {}
+        if json_data is None:
+            json_data = {}
+        self.parse_data(json_data)
 
-    def save_data(self):
-        with open(self.data_file_path, 'w', encoding='utf-8') as f:
-            json.dump(self.tasks, f, ensure_ascii=False, indent=2)
-
-    def __init__(self, data_file_path: str):
-        self.data_file_path = data_file_path
+    def parse_data(self, raw_data: Dict):
         self.tasks = {}
 
     def start_task(self, task_name: str) -> str:
-        # self.save_data()
         if task_name in self.tasks.keys():
             try:
                 task_list = self.tasks[task_name]
@@ -39,7 +34,6 @@ class TaskManager:
         return self.start_success_msg.format(task_name)
 
     def finish_task(self, task_name: str) -> str:
-        # self.save_data()
         if task_name not in self.tasks.keys():
             return self.task_not_found_msg.format(task_name)
         try:
@@ -50,7 +44,6 @@ class TaskManager:
         return self.finish_success_msg.format(task_name)
 
     def cancel_task(self, task_name: str) -> str:
-        # self.save_data()
         if task_name not in self.tasks.keys():
             return self.task_not_found_msg.format(task_name)
         try:
