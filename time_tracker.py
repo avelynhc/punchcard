@@ -33,7 +33,7 @@ def has_duplicate_task(tasks, task_name):
 
 def has_finish(tasks, finish):
     for task in tasks:
-        if finish not in task: 
+        if finish not in task:
             return False
     return True
 
@@ -80,7 +80,7 @@ if os.path.isfile(filePath) and os.access(filePath, os.R_OK):
                 with open(filePath, 'w', encoding='utf-8') as f:
                     data["tasks"][args.y].append({args.x: time.time()})
                     json.dump(data, f, ensure_ascii=False, indent=2)
-                
+
             else:
                 sys.exit('You already started this project')
 
@@ -118,7 +118,7 @@ if os.path.isfile(filePath) and os.access(filePath, os.R_OK):
             sys.exit("Not Authorized")
 
     elif args.x == 'get':
-        if has_finish(data["tasks"][args.y],"finish"):  
+        if has_finish(data["tasks"][args.y],"finish"):
             timeDiff = 0
             for task in data["tasks"][args.y]:
                 if datetime.fromtimestamp(task["start"]) >= Fromtimestamp and Totimestamp >= datetime.fromtimestamp(task["finish"]):

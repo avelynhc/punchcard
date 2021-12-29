@@ -24,18 +24,18 @@ class TaskList:
             if record.finished is None:
                 return False
         return True
-        
+
     def start_new_task(self):
         if not self.is_task_finished():
             raise Exception(self.start_err_msg)
-        new_record = TaskRecord(time.time())
+        new_record = TaskRecord(int(time.time()))
         self.records.append(new_record)
 
     def finish_task(self):
         if self.is_task_finished() or len(self.records) == 0:
             raise Exception(self.finish_err_message)
         last_index = len(self.records) - 1
-        self.records[last_index].finished = time.time()
+        self.records[last_index].finished = int(time.time())
 
     def cancel_task(self):
         if self.is_task_finished():
