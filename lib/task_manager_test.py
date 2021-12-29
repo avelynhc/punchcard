@@ -1,3 +1,4 @@
+import json
 import unittest
 import time
 
@@ -155,6 +156,28 @@ class TestManagerClass(unittest.TestCase):
             )
             for record in test_task_manager.tasks[task_name].records:
                 self.assertIsInstance(record, TaskRecord)
+
+    def test_manager_toJSON(self):
+        test_json_dict = {
+            "tasks": {
+                "test": [],
+                "manage": [
+                    {
+                        "start": 1640747299,
+                        "finish": 1640747304
+                    },
+                    {
+                        "start": 1640747299
+                    }
+                ],
+            }
+        }
+        test_task_manager = TaskManager()
+        test_task_manager.parse_data(test_json_dict)
+        self.assertEqual(
+            test_task_manager.to_json(),
+            json.dumps(test_json_dict, indent=2)
+        )
 
 
 if __name__ == '__main__':

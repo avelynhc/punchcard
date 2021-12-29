@@ -1,3 +1,4 @@
+import json
 from typing import Dict
 
 from lib.task_list import TaskList
@@ -16,6 +17,9 @@ class TaskManager:
         if json_data is None:
             json_data = {}
         self.parse_data(json_data)
+
+    def to_json(self) -> str:
+        return json.dumps({}, indent=2)
 
     def parse_data(self, raw_data: Dict):
         self.tasks = {}
