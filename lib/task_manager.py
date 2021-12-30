@@ -1,6 +1,7 @@
 import json
 from typing import Dict
 
+from lib.record import TaskRecord
 from lib.task_list import TaskList
 
 
@@ -23,6 +24,16 @@ class TaskManager:
 
     def parse_data(self, raw_data: Dict):
         self.tasks = {}
+        if "tasks" in raw_data:
+            for task_name in raw_data["tasks"]:
+                self.tasks[task_name] = TaskList()
+                for record in raw_data["tasks"][task_name]:
+                    current_record = self.tasks[task_name].records
+                    if "finish" in current_record:
+                        current_record.append(TaskRecord(record["start"],record["finish"]))
+                    else:
+                        current_record.append(TaskRecord(record["start"]))
+
 
     def start_task(self, task_name: str) -> str:
         if task_name in self.tasks.keys():
