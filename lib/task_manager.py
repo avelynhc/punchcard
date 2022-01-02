@@ -20,7 +20,19 @@ class TaskManager:
         self.parse_data(json_data)
 
     def to_json(self) -> str:
-        return json.dumps({}, indent=2)
+        tasks = {
+            "tasks": {}
+        }
+        for task_name in self.tasks:
+            tasks["tasks"][task_name] = []
+            for record in self.tasks[task_name].records:
+                current_record = {
+                    "start": record.start
+                }
+                if record.finished is not None:
+                    current_record["finish"] = record.finished
+                tasks["tasks"][task_name].append(current_record)
+        return json.dumps(tasks, indent=2)
 
     def parse_data(self, raw_data: Dict):
         self.tasks = {}
@@ -29,11 +41,10 @@ class TaskManager:
                 self.tasks[task_name] = TaskList()
                 for record in raw_data["tasks"][task_name]:
                     current_record = self.tasks[task_name].records
-                    if "finish" in current_record:
+                    if "finish" in record:
                         current_record.append(TaskRecord(record["start"],record["finish"]))
                     else:
                         current_record.append(TaskRecord(record["start"]))
-
 
     def start_task(self, task_name: str) -> str:
         if task_name in self.tasks.keys():

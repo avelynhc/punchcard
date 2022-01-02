@@ -157,7 +157,7 @@ class TestManagerClass(unittest.TestCase):
             for record in test_task_manager.tasks[task_name].records:
                 self.assertIsInstance(record, TaskRecord)
 
-    def test_manager_toJSON(self):
+    def test_manager_to_json(self):
         test_json_dict = {
             "tasks": {
                 "test": [],
