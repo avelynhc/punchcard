@@ -176,7 +176,7 @@ class TestManagerClass(unittest.TestCase):
         test_task_manager.parse_data(test_json_dict)
         self.assertEqual(
             test_task_manager.to_json(),
-            json.dumps(test_json_dict, indent=2)
+            test_json_dict
         )
 
 

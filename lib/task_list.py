@@ -47,7 +47,7 @@ class TaskList:
     def get_duration(self, from_ts: int, to_ts: int) -> str:
         time_diff = 0
         for record in self.records:
-            if record.start >= from_ts and record.finished <= to_ts:
+            if record.is_timestamp_in_range(from_ts, to_ts):
                 time_diff += record.get_duration()*1000
         if time_diff > 0:
             sec = (time_diff/1000) % 60
