@@ -19,7 +19,7 @@ class TaskManager:
             json_data = {}
         self.parse_data(json_data)
 
-    def to_json(self) -> str:
+    def to_json(self) -> Dict:
         tasks = {
             "tasks": {}
         }
@@ -32,7 +32,7 @@ class TaskManager:
                 if record.finished is not None:
                     current_record["finish"] = record.finished
                 tasks["tasks"][task_name].append(current_record)
-        return json.dumps(tasks, indent=2)
+        return tasks
 
     def parse_data(self, raw_data: Dict):
         self.tasks = {}
