@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  punchcard-db:
+    environment:
+      - POSTGRES_USER=punchcard
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=punchcard
+    container_name: punchcard-db
+    image: postgres:14.1
+    ports:
+      - "55432:5432"
+    volumes:
+      - ./build/postgres:/var/lib/postgresql/data
+
+  punchcard-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: punchcard-backend
+    environment:
+      DATABASE_URL: "postgresql://punchcard:password@punchcard-db:5432/punchcard"
+      PORT: 4000
+      DEBUG: "true"
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./backend:/app
