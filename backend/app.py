@@ -11,7 +11,7 @@ from resources.user import UserRegister, UserLogin
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
     "DATABASE_URL",
-    default="postgresql://punchcard:password@punchcard-db:5432/punchcard",
+    default="postgresql://punchcard:password@localhost:55432/punchcard",
 )
 app.secret_key = "avelyn"
 api = Api(app)

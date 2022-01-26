@@ -1,4 +1,5 @@
 from db.migrations.create_table import db
+from flask_bcrypt import Bcrypt
 
 class UserModel(db.Model):
     __tablename__ = "users"
@@ -9,8 +10,8 @@ class UserModel(db.Model):
 
     def __init__(self, username, password):
         self.username = username
-        # TODO: password should be hashed
-        self.password = password
+        bcrypt = Bcrypt()
+        self.password = bcrypt.generate_password_hash(password).decode("utf-8")
     
     def save_to_db(self):
         db.session.add(self)
@@ -19,3 +20,4 @@ class UserModel(db.Model):
     @classmethod
     def find_by_username(cls, username):
         return cls.query.filter_by(username=username).first()
+
