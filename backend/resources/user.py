@@ -1,5 +1,4 @@
-from flask_restful import Resource, reqparse
-from werkzeug.security import safe_str_cmp
+from flask_restful import Resource, reqparse, inputs
 from flask_jwt_extended import create_access_token
 from flask_bcrypt import Bcrypt
 
@@ -7,14 +6,14 @@ from models.user import UserModel
 
 _user_parser = reqparse.RequestParser()
 _user_parser.add_argument("username",
-                            type=str,
+                            type=inputs.regex("^\w{6,30}[0-9]*_*-*$"),
                             required=True,
-                            help="This field cannot be left blank"
+                            help="- Username must contain only letters, numbers, underscore or dash - Username must be betwen 6 & 30 characters"
                         )
 _user_parser.add_argument("password",
-                            type=str,
+                            type=inputs.regex("^\w{10,20}[0-9]+[!,@,#,$,%,^,&,*,(,),_,+,=,/,?]$"),
                             required=True,
-                            help="This field cannot be left blank"
+                            help="- Password must contain letters, numbers and one special chracter - Password must be betwen 10 & 20 characters"
                         )
 
 class UserRegister(Resource):
@@ -39,5 +38,3 @@ class UserLogin(Resource):
                     "access_token": access_token
             }, 200
         return {"message": "Invalid credentials"}, 401
-
-
