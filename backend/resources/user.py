@@ -33,7 +33,9 @@ class UserLogin(Resource):
         user = UserModel.find_by_username(data["username"])
         bcrypt = Bcrypt()
         if user and bcrypt.check_password_hash(user.password, data["password"]):
-            access_token = create_access_token(identity=user.id)
+            access_token = create_access_token(
+                identity=user.id
+            )
             return {
                     "access_token": access_token
             }, 200
