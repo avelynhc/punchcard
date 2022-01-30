@@ -5,8 +5,8 @@ from flask_restful import Api
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 
 from db.migrations.create_table import db
-from models.task_detail import ItemModel
 from resources.user import UserRegister, UserLogin, UserModel
+from resources.task_detail import TaskDetail, TaskDetailList
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
@@ -53,6 +53,8 @@ def missing_token_callback(error):
 
 api.add_resource(UserRegister, "/register")
 api.add_resource(UserLogin, "/login")
+api.add_resource(TaskDetail, "/task/<string:task_name>")
+api.add_resource(TaskDetailList, "/tasks")
 
 if __name__ == "__main__":
     db.init_app(app)
