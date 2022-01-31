@@ -1,6 +1,5 @@
 import sys
 import json
-import time
 import os
 import argparse
 from datetime import datetime
