@@ -10,20 +10,27 @@ class TaskDetailModel(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     user = db.relationship("UserModel")
 
-    def __init__(self, start_time, finish_time, task_name, user_id):
+    def __init__(self, task_name, start_time):
         self.start_time = start_time
-        self.finish_time = finish_time
+        # self.finish_time = finish_time
         self.task_name = task_name
-        self.user_id = user_id
+        # self.user_id = user_id
     
     @classmethod
     def find_all(cls):
         return cls.query.all()
     
     @classmethod
-    def find_by_id(cls, taskName):
+    def find_by_name(cls, taskName):
         return cls.query.filter_by(task_name=taskName).first()
     
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
+
+    def json(self):
+        return {
+            "id" : self.id,
+            "task_name" : self.task_name,
+            "start_time" : self.start_time
+        }
