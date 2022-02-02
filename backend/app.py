@@ -42,14 +42,14 @@ def invalid_token_callback(error):
     return jsonify({
         "description": "Signature verification failed",
         "error": "Invalid token"
-    }), 404
+    }), 401
 
 @jwt.unauthorized_loader
 def missing_token_callback(error):
     return jsonify({
         "description": "Request does not contain an access token",
         "error": "Authorization required"
-    }), 404
+    }), 401
 
 api.add_resource(UserRegister, "/register")
 api.add_resource(UserLogin, "/login")
