@@ -12,11 +12,11 @@ class TaskDetailModel(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     user = db.relationship("UserModel")
 
-    def __init__(self, task_name, start_time, user_id):
-        self.start_time = start_time
-        # self.finish_time = finish_time
-        self.task_name = task_name
+    def __init__(self, user_id, task_name, start_time, finish_time = None):
         self.user_id = user_id
+        self.task_name = task_name
+        self.start_time = start_time
+        self.finish_time = finish_time
     
     @classmethod
     def find_all(cls):
@@ -25,6 +25,14 @@ class TaskDetailModel(db.Model):
     @classmethod
     def find_by_name(cls, taskName):
         return cls.query.filter_by(task_name=taskName).first()
+
+    @classmethod
+    def is_task_finished(cls) -> bool:
+        records = cls.query.all()
+        for record in records:
+            if record.finish_time is None:
+                return False
+        return True
     
     def save_to_db(self):
         db.session.add(self)
@@ -33,8 +41,10 @@ class TaskDetailModel(db.Model):
     def json(self):
         return {
             "id" : self.id,
+            "user_id" : self.user_id,
             "task_name" : self.task_name,
-            "start_time" : self.start_time
+            "start_time" : self.start_time,
+            "finish_time" : self.finish_time
         }
 
     @classmethod
