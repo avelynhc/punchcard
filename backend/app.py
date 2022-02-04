@@ -18,10 +18,6 @@ app.config["JWT_SECRET_KEY"] = "avelyn"
 api = Api(app)
 jwt = JWTManager(app)
 
-@app.before_first_request
-def create_table():
-    db.create_all()
-
 @app.route("/ping", methods=["GET"])
 def ping_pong():
     return "pong"

@@ -1,3 +1,4 @@
+from types import ClassMethodDescriptorType
 from db.migrations.create_table import db
 from models.user import UserModel
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -27,12 +28,12 @@ class TaskDetailModel(db.Model):
         return cls.query.filter_by(task_name=taskName).first()
 
     @classmethod
-    def is_task_finished(cls) -> bool:
-        records = cls.query.all()
-        for record in records:
-            if record.finish_time is None:
-                return False
-        return True
+    def find_by_user_id(cls, userID, task_name):
+        return cls.query.filter_by(user_id=userID, task_name=task_name).all()
+
+    @classmethod
+    def find_unfinished_by_user_id(cls, userID, task_name):
+        return cls.query.filter_by(user_id=userID, task_name=task_name, finish_time=None).first()
     
     def save_to_db(self):
         db.session.add(self)
@@ -50,10 +51,15 @@ class TaskDetailModel(db.Model):
     @classmethod
     @jwt_required()
     def find_current_user(cls):
-        user_id = get_jwt_identity()
-        if user_id is None:
-            return {"message": "Not able to retrieve user id"}, 404
-        current_user = UserModel.find_by_id(user_id)
-        if current_user is None:
-            return {"message": "Not able to find user_id in our database"}, 404
-        return current_user
+        try:
+            user_id = get_jwt_identity()
+            if user_id is None:
+                raise Exception("Not able to retrieve user id")
+            current_user = UserModel.find_by_id(user_id)
+            if current_user is None:
+                raise Exception("Not able to find user_id in our database")
+            # return cls.query.filter_by(user_id=current_user.id).first()
+            return current_user
+        except Exception as E:
+            print(E)
+
