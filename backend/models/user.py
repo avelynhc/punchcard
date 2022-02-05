@@ -1,4 +1,4 @@
-from db.migrations.create_table import db
+from db.db import db
 from flask_bcrypt import Bcrypt
 
 class UserModel(db.Model):
@@ -12,7 +12,7 @@ class UserModel(db.Model):
         self.username = username
         bcrypt = Bcrypt()
         self.password = bcrypt.generate_password_hash(password).decode("utf-8")
-    
+
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()

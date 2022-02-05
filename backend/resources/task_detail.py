@@ -34,7 +34,7 @@ class TaskDetail(Resource):
             return {"message": "You need to finish task '{}' first to be able to start a new project".format(task_name)}, 404
         new_task = TaskDetailModel(current_user.id, task_name, int(time.time()))
         new_task.save_to_db()
-        return new_task.json() 
+        return new_task.json()
 
 
 class TaskDetailWithFinish(Resource):
@@ -48,7 +48,7 @@ class TaskDetailWithFinish(Resource):
             task_detail = TaskDetailModel.find_unfinished_by_user_id(current_user.id, task_name)
         except:
             return {"message": "An error occured to get the task detail"}, 500
-        if task_detail is None: 
+        if task_detail is None:
             return {"message": "You do not have unfinished task named '{}'".format(task_name)}, 404
         task_detail.finish_time = int(time.time())
         task_detail.save_to_db()
