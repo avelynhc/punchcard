@@ -1,5 +1,4 @@
-from types import ClassMethodDescriptorType
-from db.migrations.create_table import db
+from db.db import db
 from models.user import UserModel
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
@@ -18,11 +17,11 @@ class TaskDetailModel(db.Model):
         self.task_name = task_name
         self.start_time = start_time
         self.finish_time = finish_time
-    
+
     @classmethod
     def find_all(cls):
         return cls.query.all()
-    
+
     @classmethod
     def find_by_name(cls, taskName):
         return cls.query.filter_by(task_name=taskName).first()
@@ -34,7 +33,7 @@ class TaskDetailModel(db.Model):
     @classmethod
     def find_unfinished_by_user_id(cls, userID, task_name):
         return cls.query.filter_by(user_id=userID, task_name=task_name, finish_time=None).first()
-    
+
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()
@@ -62,4 +61,3 @@ class TaskDetailModel(db.Model):
             return current_user
         except Exception as E:
             print(E)
-

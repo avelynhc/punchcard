@@ -4,7 +4,7 @@ from flask import Flask, jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 
-from db.migrations.create_table import db
+from db.db import db
 from resources.user import UserRegister, UserLogin, UserModel
 from resources.task_detail import TaskDetail, TaskDetailList, TaskDetailWithFinish
 
