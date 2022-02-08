@@ -8,6 +8,13 @@ import time
 class TaskDetail(Resource):
     @jwt_required()
     def get(self, task_name):
+        args = request.args
+        from_ts = 0
+        to_ts = int(time.time())
+        if args.get("to") is not None and args.get("to").isdigit():
+            to_ts = int(args.get("to"))
+        if args.get("from") is not None and args.get("from").isdigit():
+            from_ts = int(args.get("from"))
         try:
             current_user = TaskDetailModel.find_current_user()
         except:
@@ -15,11 +22,9 @@ class TaskDetail(Resource):
         try:
             task_detail = TaskDetailModel.find_by_user_id(current_user.id, task_name)
             if task_detail:
-                args = request.args
                 duration = 0
-                from_ts = args.get("from", default=int(task_detail[0].start_time), type=int)
-                to_ts = args.get("to", default=int(time.time()), type=int)
-                duration = to_ts - from_ts
+                for record in task_detail:
+                    duration += record.finish_time - record.start_time
                 return {"duration": duration}, 200
             return {"message": "you do not have task '{}' in your task list".format(task_name)}, 404
         except:
