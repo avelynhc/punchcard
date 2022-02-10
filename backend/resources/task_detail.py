@@ -15,6 +15,10 @@ class TaskDetail(Resource):
             to_ts = int(args.get("to"))
         if args.get("from") is not None and args.get("from").isdigit():
             from_ts = int(args.get("from"))
+        if to_ts > int(time.time()):
+            to_ts = int(time.time())
+        if from_ts > to_ts:
+            from_ts = to_ts
         try:
             current_user = TaskDetailModel.find_current_user()
         except:
@@ -24,12 +28,20 @@ class TaskDetail(Resource):
             if task_detail:
                 duration = 0
                 for record in task_detail:
-                    duration += record.finish_time - record.start_time
+                    if record.start_time < to_ts and record.finish_time > from_ts:
+                        from_stamp = record.start_time
+                        to_stamp = record.finish_time
+                        if from_stamp < from_ts:
+                            from_stamp = from_ts
+                        if to_stamp > to_ts:
+                            to_stamp = to_ts
+
+                        duration = to_stamp - from_stamp
+
                 return {"duration": duration}, 200
-            return {"message": "you do not have task '{}' in your task list".format(task_name)}, 404
+            return {"message": "you do not have task '{}' in the time range given".format(task_name)}, 404
         except:
             return {"message": "an error occured to get the task detail"}, 500
-
     @jwt_required()
     def post(self, task_name):
         try:
