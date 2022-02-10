@@ -6,7 +6,7 @@ from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 
 from db.db import db
 from resources.user import UserRegister, UserLogin, UserModel
-from resources.task_detail import TaskDetail, TaskDetailList, TaskDetailWithFinish
+from resources.task_detail import TaskDetail, TaskDetailList, TaskDetailWithFinish, TaskDetailWithCancel
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
@@ -51,6 +51,7 @@ api.add_resource(UserRegister, "/register")
 api.add_resource(UserLogin, "/login")
 api.add_resource(TaskDetail, "/task/<string:task_name>")
 api.add_resource(TaskDetailWithFinish, "/task/<string:task_name>/finish")
+api.add_resource(TaskDetailWithCancel, "/task/<string:task_name>/cancel")
 api.add_resource(TaskDetailList, "/tasks")
 
 if __name__ == "__main__":

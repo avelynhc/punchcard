@@ -38,6 +38,10 @@ class TaskDetailModel(db.Model):
         db.session.add(self)
         db.session.commit()
 
+    def delete_from_db(self):
+        db.session.delete(self)
+        db.session.commit()
+
     def json(self):
         return {
             "id" : self.id,
@@ -57,7 +61,6 @@ class TaskDetailModel(db.Model):
             current_user = UserModel.find_by_id(user_id)
             if current_user is None:
                 raise Exception("Not able to find user_id in our database")
-            # return cls.query.filter_by(user_id=current_user.id).first()
             return current_user
         except Exception as E:
             print(E)
