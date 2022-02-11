@@ -4,8 +4,7 @@ from models.task_detail import TaskDetailModel
 from flask_jwt_extended import jwt_required
 import time
 
-# this post will be only used when user posts first task
-class TaskDetail(Resource):
+class TaskDuration(Resource):
     @jwt_required()
     def get(self, task_name):
         args = request.args
@@ -42,6 +41,24 @@ class TaskDetail(Resource):
             return {"message": "you do not have task '{}' in the time range given".format(task_name)}, 404
         except:
             return {"message": "an error occured to get the task detail"}, 500
+
+
+class TaskDetail(Resource):
+    @jwt_required()
+    def get(self, task_name):
+        try:
+            current_user = TaskDetailModel.find_current_user()
+        except:
+            return {"message": "Not able to verify user_id"}, 401
+        try:
+            task_detail = TaskDetailModel.find_by_user_id(current_user.id, task_name)
+        except:
+            return {"message": "An error occured to get the task detail"}, 500
+        if task_detail:
+            task_list = [task.json() for task in task_detail]
+            return {task_name: task_list}
+        return {"message": "You do not have task '{}' in your task list".format(task_name)}, 404
+    
     @jwt_required()
     def post(self, task_name):
         try:
@@ -75,6 +92,7 @@ class TaskDetailWithFinish(Resource):
         task_detail.finish_time = int(time.time())
         task_detail.save_to_db()
         return task_detail.json()
+
 
 class TaskDetailWithCancel(Resource):
     @jwt_required()
