@@ -48,18 +48,10 @@ const AuthForm = (props) => {
         if (res.ok) {
           return res.json();
         } else {
-          return res.json().then(() => {
-            let errorMessage = "authentication failed!";
-            throw new Error(errorMessage);
-          });
+          throw new Error("authentication failed!");
         }
       })
       .then((data) => {
-        //   console.log(data)
-        // const expirationTime = new Date(
-        //     new Date().getTime() + +data.expiresIn * 1000
-        // );
-        // console.log(expirationTime)
         authCtx.login(data.access_token);
         history.replace("/");
       })
@@ -92,17 +84,20 @@ const AuthForm = (props) => {
           />
         </div>
         <div className={classes.actions}>
-          {!isLoading && (
-            <button>{isLogin ? "Login" : "Create Account"}</button>
+          {isLoading ? (
+              <p>Sending request...</p>
+          ) : (
+              <>
+                <button>{isLogin ? "Login" : "Create Account"}</button>
+                <button
+                type="button"
+                className={classes.toggle}
+                onClick={switchAuthModeHandler}
+                >
+                {isLogin ? "Create a new account" : "Login with existing account"}
+                </button>
+              </>
           )}
-          {isLoading && <p>Sending request...</p>}
-          <button
-            type="button"
-            className={classes.toggle}
-            onClick={switchAuthModeHandler}
-          >
-            {isLogin ? "Create a new account" : "Login with existing account"}
-          </button>
         </div>
       </form>
     </section>

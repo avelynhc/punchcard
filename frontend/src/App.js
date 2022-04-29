@@ -11,10 +11,10 @@ function App() {
         <Route path='/' exact>
           <HomePage />
         </Route>
-        <Route path='/auth'>
+        <Route path='/auth' exact>
           <AuthPage />
         </Route>
-        <Route path='/profile'>
+        <Route path='/profile' exact>
           <UserProfile />
         </Route>
         <Route path='*'>

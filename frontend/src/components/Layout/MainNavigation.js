@@ -35,18 +35,6 @@ const MainNavigation = () => {
             </li>
           )}
         </ul>
-
-        {/* <ul>
-            <li>
-              <Link to='/auth'>Login</Link>
-            </li>
-            <li>
-              <Link to='/profile'>Profile</Link>
-            </li>
-            <li>
-              <button onClick={logoutHandler}>Logout</button>
-            </li>
-        </ul> */}
       </nav>
     </header>
   );
