@@ -1,3 +1,4 @@
+from flask import request
 from flask_restful import Resource, reqparse, inputs
 from flask_jwt_extended import create_access_token
 from flask_bcrypt import Bcrypt
@@ -40,3 +41,12 @@ class UserLogin(Resource):
                     "access_token": access_token
             }, 200
         return {"message": "Invalid credentials"}, 401
+
+class RetrieveUser(Resource):
+    def get(self):
+        try:
+            storedToken = request.get_json()['token'];
+            if (storedToken):
+                return {'storedToken': storedToken}, 200
+        except:
+            return {'message': 'cannot verify token'}, 401

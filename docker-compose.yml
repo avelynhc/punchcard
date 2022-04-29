@@ -43,12 +43,12 @@ services:
     volumes:
       - ./backend:/app
 
-  punchcard-frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.dev
-    container_name: punchcard-frontend
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./frontend:/app
+  # punchcard-frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile.dev
+  #   container_name: punchcard-frontend
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./frontend:/app

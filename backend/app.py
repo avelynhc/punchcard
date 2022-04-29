@@ -1,14 +1,17 @@
 import os
+import resource
 
 from flask import Flask, jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
+from flask_cors import CORS
 
 from db.db import db
-from resources.user import UserRegister, UserLogin, UserModel
+from resources.user import UserRegister, UserLogin, UserModel, RetrieveUser
 from resources.task_detail import TaskDetail, TaskDetailList, TaskDetailWithFinish, TaskDetailWithCancel, TaskDuration
 
 app = Flask(__name__)
+CORS(app)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
     "DATABASE_URL",
     default="postgresql://punchcard:password@localhost:55432/punchcard",
@@ -49,6 +52,7 @@ def missing_token_callback(error):
 
 api.add_resource(UserRegister, "/register")
 api.add_resource(UserLogin, "/login")
+api.add_resource(RetrieveUser, "/me")
 api.add_resource(TaskDuration, "/task/<string:task_name>/duration")
 api.add_resource(TaskDetail, "/task/<string:task_name>")
 api.add_resource(TaskDetailWithFinish, "/task/<string:task_name>/finish")
