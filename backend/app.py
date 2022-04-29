@@ -1,14 +1,17 @@
 import os
+import resource
 
 from flask import Flask, jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
+from flask_cors import CORS
 
 from db.db import db
 from resources.user import UserRegister, UserLogin, UserModel, RetrieveUser
 from resources.task_detail import TaskDetail, TaskDetailList, TaskDetailWithFinish, TaskDetailWithCancel, TaskDuration
 
 app = Flask(__name__)
+CORS(app)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
     "DATABASE_URL",
     default="postgresql://punchcard:password@localhost:55432/punchcard",
@@ -17,6 +20,10 @@ app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
 app.config["JWT_SECRET_KEY"] = "avelyn"
 api = Api(app)
 jwt = JWTManager(app)
+
+@app.route("/", methods=["GET"])
+def helloWorld():
+  return "Hello, world!"
 
 @app.route("/ping", methods=["GET"])
 def ping_pong():
