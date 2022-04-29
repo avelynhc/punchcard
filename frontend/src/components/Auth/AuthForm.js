@@ -21,8 +21,6 @@ const AuthForm = (props) => {
     event.preventDefault();
     const enteredUsername = usernameInputRef.current.value;
     const enteredPassword = passwordInputRef.current.value;
-    console.log(enteredUsername);
-    console.log(enteredPassword);
 
     setIsLoading(true);
     let url;

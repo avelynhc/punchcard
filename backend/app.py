@@ -21,10 +21,6 @@ app.config["JWT_SECRET_KEY"] = "avelyn"
 api = Api(app)
 jwt = JWTManager(app)
 
-@app.route("/", methods=["GET"])
-def helloWorld():
-  return "Hello, world!"
-
 @app.route("/ping", methods=["GET"])
 def ping_pong():
     return "pong"
