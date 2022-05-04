@@ -2,6 +2,7 @@ from flask import request
 from flask_restful import Resource, reqparse, inputs
 from flask_jwt_extended import create_access_token
 from flask_bcrypt import Bcrypt
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from models.user import UserModel
 
@@ -43,10 +44,18 @@ class UserLogin(Resource):
         return {"message": "Invalid credentials"}, 401
 
 class RetrieveUser(Resource):
+    @classmethod
+    @jwt_required()
     def get(self):
         try:
-            storedToken = request.get_json()['token'];
-            if (storedToken):
-                return {'storedToken': storedToken}, 200
-        except:
-            return {'message': 'cannot verify token'}, 401
+            user_id = get_jwt_identity()
+            if not user_id:
+                raise Exception({"code": "authorization_header_missing",
+                                "description": "Authorization header is expected"}, 401)
+            current_user = UserModel.find_by_id(user_id)
+            if current_user is None:
+                raise Exception("not able to find user_id in our database")
+            return {'me': user_id}, 200
+
+        except Exception as E:
+            print(E)
