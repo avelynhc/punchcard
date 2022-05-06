@@ -24,7 +24,7 @@ const App = () => {
         .then((data) => {
           if (data.me) {
             authCtx.isLoggedIn(true);
-            history.push('/');
+            history.push("/");
           }
         })
         .catch((err) => {
@@ -32,21 +32,19 @@ const App = () => {
           localStorage.removeItem("token");
         });
     } else {
-      history.push('/auth');
+      history.push("/auth");
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, authCtx, history]);
 
   return (
     <Layout>
       <Switch>
-          <Route path="/" exact>
-            <HomePage />
-          </Route>
-        )
-          <Route path="/auth" exact>
-            <AuthPage />
-          </Route>
-        )
+        <Route path="/" exact>
+          <HomePage />
+        </Route>
+        <Route path="/auth" exact>
+          <AuthPage />
+        </Route>
         <Route path="/profile" exact>
           <UserProfile />
         </Route>

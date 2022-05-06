@@ -6,16 +6,10 @@ const AddTask = (props) => {
 
   const [isTaskStarted, setIsTaskStarted] = useState(false);
 
-  const switchTaskModelHandler = () => {
-    console.log(isTaskStarted)
-    setIsTaskStarted((prevState) => !prevState);
-    console.log(isTaskStarted)
-  };
-
   const submitHandler = (event) => {
     event.preventDefault();
     props.onAddTask(taskNameRef.current.value);
-    setIsTaskStarted(true);
+    isTaskStarted ? setIsTaskStarted(true) : setIsTaskStarted(false);
   };
 
   return (

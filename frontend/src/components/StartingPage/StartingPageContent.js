@@ -6,19 +6,23 @@ import Timer from "../UI/Timer";
 import AuthContext from "../../store/auth-context";
 
 const BACKEND_API = "http://127.0.0.1:4000";
-
 const StartingPageContent = () => {
   const [isAdded, setIsAdded] = useState(false);
   const authCtx = useContext(AuthContext);
 
   const addTaskHandler = (newTask) => {
+    let url;
+    isAdded
+      ? (url = `${BACKEND_API}/task/${newTask}`)
+      : (url = `${BACKEND_API}/task/${newTask}/finish`);
+
     const token = localStorage.getItem("token");
-    fetch(`${BACKEND_API}/task/${newTask}`, {
+    fetch(url, {
       method: "POST",
       body: JSON.stringify(newTask),
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer " + token,
+        Authorization: "Bearer " + token,
       },
     })
       .then((res) => {
@@ -30,10 +34,12 @@ const StartingPageContent = () => {
         }
       })
       .then((data) => {
-        authCtx.token(data.access_token);
+        console.log(data);
+        // authCtx.token(data.access_token);
+        authCtx.token = token;
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.message);
         alert(err.message);
       });
   };
@@ -42,10 +48,6 @@ const StartingPageContent = () => {
     <Fragment>
       <section className={classes.starting}>
         <h1>Welcome to punch card!</h1>
-        <img
-          src="https://static.righto.com/images/1401-boot/card-codes-w600.jpg"
-          alt="punch-card"
-        ></img>
       </section>
       <section>
         <AddTask onAddTask={addTaskHandler}></AddTask>
@@ -56,5 +58,3 @@ const StartingPageContent = () => {
 };
 
 export default StartingPageContent;
-
-
