@@ -30,7 +30,6 @@ const StartingPageContent = () => {
         }
       })
       .then((data) => {
-        console.log(data);
         authCtx.token(data.access_token);
       })
       .catch((err) => {

@@ -21,10 +21,6 @@ const App = () => {
           Authorization: "Bearer " + token,
         },
       })
-        // .then((res) => {
-        //   console.log(res)
-        //   return res.json();
-        // })
         .then((data) => {
           if (data.me) {
             authCtx.isLoggedIn(true);
