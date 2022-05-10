@@ -4,5 +4,12 @@
 }
 
 .starting h1 {
-  font-size: 3rem;
+  font-size: 2rem;
+}
+
+.starting img {
+  align-items: center;
+  margin: 1rem auto;
+  width: 80%;
+  height: auto;
 }
