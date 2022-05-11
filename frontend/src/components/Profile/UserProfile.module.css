@@ -1,12 +1,48 @@
 .profile {
-  margin: 3rem auto;
+  margin: 1rem auto;
   text-align: center;
 }
 
-.profile h1 {
-  font-size: 3rem;
+.profile > h2 {
+  font-size: 2rem;
 }
 
-.profile h2 {
-    font-size: 2rem;
+.profile > h3 {
+  font-size: 1.5rem;
+}
+
+.data {
+  background-color: rgb(161, 157, 156);
+  padding: 1rem;
+}
+
+.data > li {
+  list-style-type: none;
+}
+
+.complete {
+  background: rgb(25, 136, 25);
+  border: 1px solid rgb(25, 136, 25);
+  color: #fff;
+  padding: 0.5rem 2rem;
+  border-radius: 20px;
+  display: inline-block;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.pending {
+  background: rgb(219, 154, 32);
+  border: 1px solid rgb(219, 154, 32);
+  color: #fff;
+  padding: 0.5rem 2rem;
+  border-radius: 20px;
+  display: inline-block;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
 }

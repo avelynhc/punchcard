@@ -10,11 +10,10 @@ const BACKEND_API = "http://127.0.0.1:4000";
 
 const App = () => {
   const authCtx = useContext(AuthContext);
-  const isLoggedIn = authCtx.isLoggedIn;
   const history = useHistory();
 
   useEffect(() => {
-    let token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (token) {
       fetch(`${BACKEND_API}/me`, {
         headers: {
@@ -22,9 +21,15 @@ const App = () => {
         },
       })
         .then((data) => {
-          if (data.me) {
-            authCtx.isLoggedIn(true);
-            history.push('/');
+          if (data.ok) {
+            return data.json()
+          } else {
+            throw new Error("failed to get me information")
+          }
+        })
+        .then((resp) => {
+          if (resp.me) {
+            history.push("/");
           }
         })
         .catch((err) => {
@@ -32,21 +37,19 @@ const App = () => {
           localStorage.removeItem("token");
         });
     } else {
-      history.push('/auth');
+      history.push("/auth");
     }
-  }, [isLoggedIn]);
+  }, [authCtx, history]);
 
   return (
     <Layout>
       <Switch>
-          <Route path="/" exact>
-            <HomePage />
-          </Route>
-        )
-          <Route path="/auth" exact>
-            <AuthPage />
-          </Route>
-        )
+        <Route path="/" exact>
+          <HomePage />
+        </Route>
+        <Route path="/auth" exact>
+          <AuthPage />
+        </Route>
         <Route path="/profile" exact>
           <UserProfile />
         </Route>

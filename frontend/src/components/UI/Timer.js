@@ -2,9 +2,10 @@ import React from "react";
 import { useStopwatch } from "react-timer-hook";
 
 const Timer = () => {
-  const { seconds, minutes, hours, days, start, pause, reset } =
+  const { seconds, minutes, hours, days } =
     useStopwatch({ autoStart: true });
 
+  // TODO: replace inline styles with proper styles
   return (
     <div style={{ textAlign: "center" }}>
       <div style={{ fontSize: "100px" }}>
