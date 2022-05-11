@@ -1,5 +1,5 @@
 import classes from "./UserProfile.module.css";
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 const BACKEND_API = "http://127.0.0.1:4000";
 
@@ -8,11 +8,11 @@ const UserProfile = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchTasksHandler = useCallback(async () => {
+  const fetchTasksHandler = async () => {
     setIsLoading(true);
     setError(null);
     try {
-      let token = localStorage.getItem("token");
+      const token = localStorage.getItem("token");
       if (token) {
         const response = await fetch(`${BACKEND_API}/tasks`, {
           headers: {
@@ -38,10 +38,10 @@ const UserProfile = () => {
       setError(error.message);
     }
     setIsLoading(false);
-  }, []);
+  };
 
   const FetchDurationHandler = (taskName) => {
-    let token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
     if (token) {
       return fetch(`${BACKEND_API}/task/${taskName}/duration`, {
         headers: {
@@ -63,7 +63,7 @@ const UserProfile = () => {
 
   useEffect(() => {
     fetchTasksHandler();
-  }, [fetchTasksHandler]);
+  }, []);
 
   return (
     <React.Fragment>
@@ -75,7 +75,6 @@ const UserProfile = () => {
         </section>
         {isLoading && <p>Loading...</p>}
         {error && <p className={classes.error}>{error}</p>}
-
         {tasks.length > 0 ? (
           <ul className={classes.data}>
             {tasks.map((task) => (
@@ -83,9 +82,7 @@ const UserProfile = () => {
                 <p>task name: {task.task_name}</p>
                 <p>start time: {task.start_time}</p>
                 {task.finish_time && <p>finish time: {task.finish_time}</p>}
-
                 {task.duration && <p>duration: {task.duration}</p>}
-
                 {task.finish_time ? (
                   <p className={classes.complete}>Completed</p>
                 ) : (

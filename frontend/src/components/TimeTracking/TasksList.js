@@ -3,10 +3,10 @@ import classes from "./TasksList.module.css";
 
 import Task from "./Task";
 
-const TasksList = (props) => {
+const TasksList = ({ tasks }) => {
   return (
     <ul className={classes["tasks-list"]}>
-      {props.tasks.map((task) => (
+      {tasks.map((task) => (
         <Task
           key={task.id}
           user_id={task.user_id}

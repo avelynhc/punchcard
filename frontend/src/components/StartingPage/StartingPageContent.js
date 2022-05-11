@@ -1,22 +1,20 @@
-import { Fragment, useState, useContext } from "react";
+import { useState } from "react";
 import classes from "./StartingPageContent.module.css";
 
 import AddTask from "../TimeTracking/AddTask";
 import Timer from "../UI/Timer";
-import AuthContext from "../../store/auth-context";
 
 const BACKEND_API = "http://127.0.0.1:4000";
 const StartingPageContent = () => {
   const [isAdded, setIsAdded] = useState(false);
-  const authCtx = useContext(AuthContext);
 
   const addTaskHandler = (newTask) => {
-    let url;
-    isAdded
-      ? (url = `${BACKEND_API}/task/${newTask}`)
-      : (url = `${BACKEND_API}/task/${newTask}/finish`);
+    const url = isAdded
+      ? `${BACKEND_API}/task/${newTask}/finish`
+      : `${BACKEND_API}/task/${newTask}`;
 
     const token = localStorage.getItem("token");
+    // TODO: make the check for token happen in a single place
     fetch(url, {
       method: "POST",
       body: JSON.stringify(newTask),
@@ -33,11 +31,6 @@ const StartingPageContent = () => {
           throw new Error("failed to add a new task");
         }
       })
-      .then((data) => {
-        console.log(data);
-        // authCtx.token(data.access_token);
-        authCtx.token = token;
-      })
       .catch((err) => {
         console.log(err.message);
         alert(err.message);
@@ -45,15 +38,15 @@ const StartingPageContent = () => {
   };
 
   return (
-    <Fragment>
+    <>
       <section className={classes.starting}>
         <h1>Welcome to punch card!</h1>
       </section>
       <section>
-        <AddTask onAddTask={addTaskHandler}></AddTask>
+        <AddTask onAddTask={addTaskHandler} />
         {isAdded && <Timer />}
       </section>
-    </Fragment>
+    </>
   );
 };
 

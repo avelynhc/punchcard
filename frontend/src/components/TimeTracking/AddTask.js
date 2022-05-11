@@ -1,17 +1,18 @@
 import { useRef, useState } from "react";
 import classes from "./AddTask.module.css";
 
-const AddTask = (props) => {
+const AddTask = ({ onAddTask }) => {
   const taskNameRef = useRef("");
 
   const [isTaskStarted, setIsTaskStarted] = useState(false);
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onAddTask(taskNameRef.current.value);
+    onAddTask(taskNameRef.current.value);
     isTaskStarted ? setIsTaskStarted(true) : setIsTaskStarted(false);
   };
 
+  // TODO: add disabled state to the submit button
   return (
     <form onSubmit={submitHandler}>
       <div className={classes.control}>
