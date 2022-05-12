@@ -34,6 +34,10 @@ class TaskDetailModel(db.Model):
     def find_unfinished_by_user_id(cls, userID, task_name):
         return cls.query.filter_by(user_id=userID, task_name=task_name, finish_time=None).first()
 
+    @classmethod
+    def find_finished_by_user_id(cls, userID, task_name):
+        return cls.query.filter_by(user_id=userID, task_name=task_name).first()
+
     def save_to_db(self):
         db.session.add(self)
         db.session.commit()

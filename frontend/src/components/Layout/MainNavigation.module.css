@@ -24,7 +24,7 @@
 }
 
 .header li {
-  margin: 0 1rem;
+  margin: 0 0.5rem;
 }
 
 .header a {
@@ -42,6 +42,7 @@
   padding: 0.5rem 1.5rem;
   border-radius: 6px;
   cursor: pointer;
+  margin: 0 0.5rem;
 }
 
 .header a:hover {

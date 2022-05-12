@@ -33,7 +33,6 @@ const StartingPageContent = () => {
       })
       .catch((err) => {
         console.log(err.message);
-        alert(err.message);
       });
   };
 

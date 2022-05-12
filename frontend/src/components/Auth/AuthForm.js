@@ -9,6 +9,7 @@ const AuthForm = (props) => {
   const passwordInputRef = useRef();
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   const authCtx = useContext(AuthContext);
   const history = useHistory();
@@ -19,6 +20,7 @@ const AuthForm = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
+    setMessage("");
     const enteredUsername = usernameInputRef.current.value;
     const enteredPassword = passwordInputRef.current.value;
 
@@ -50,12 +52,19 @@ const AuthForm = (props) => {
         }
       })
       .then((data) => {
-        authCtx.login(data.access_token);
-        history.replace("/");
+        if (isLogin) {
+          authCtx.login(data.access_token);
+          history.replace("/");
+        }
+        else {
+          setMessage(data.message)
+          authCtx.register(data.access_token);
+          history.replace("/auth");
+        } 
       })
       .catch((err) => {
         console.log(err);
-        alert(err.message);
+        setMessage(err.message);
       });
   };
 
@@ -81,20 +90,23 @@ const AuthForm = (props) => {
             required
           />
         </div>
+        {message && <p className={classes.error}>{message}</p>}
         <div className={classes.actions}>
           {isLoading ? (
-              <p>Sending request...</p>
+            <p>Sending request...</p>
           ) : (
-              <>
-                <button>{isLogin ? "Login" : "Create Account"}</button>
-                <button
+            <>
+              <button>{isLogin ? "Login" : "Create Account"}</button>
+              <button
                 type="button"
                 className={classes.toggle}
                 onClick={switchAuthModeHandler}
-                >
-                {isLogin ? "Create a new account" : "Login with existing account"}
-                </button>
-              </>
+              >
+                {isLogin
+                  ? "Create a new account"
+                  : "Login with existing account"}
+              </button>
+            </>
           )}
         </div>
       </form>
