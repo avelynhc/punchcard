@@ -8,11 +8,9 @@ const BACKEND_API = "http://127.0.0.1:4000";
 const UserProfile = () => {
   const [tasks, setTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  // const [error, setError] = useState(null);
 
   const fetchTasksHandler = async () => {
     setIsLoading(true);
-    // setError(null);
     try {
       const token = localStorage.getItem("token");
       if (token) {
@@ -37,7 +35,6 @@ const UserProfile = () => {
       }
     } catch (error) {
       console.log(error);
-      // setError(error.message);
     }
     setIsLoading(false);
   };
@@ -76,13 +73,12 @@ const UserProfile = () => {
           <button onClick={fetchTasksHandler}>Fetch Task Details</button>
         </section>
         {isLoading && <p>Loading...</p>}
-        {/* {error && <p className={classes.error}>{error}</p>} */}
         {tasks.length > 0 ? (
           <ul className={classes.data}>
             {tasks.map((task) => (
               <li key={task.id}>
-                <Link to={`/task/${task.task_name}`}>
-                  <p>task name: {task.task_name}</p>
+                <Link to={`/tasks/${task.task_name}`}>
+                  task name: {task.task_name}
                 </Link>
                 <p>start time: {task.start_time}</p>
                 {task.finish_time && <p>finish time: {task.finish_time}</p>}
@@ -92,7 +88,6 @@ const UserProfile = () => {
                 ) : (
                   <p className={classes.pending}>Not Completed</p>
                 )}
-
               </li>
             ))}
           </ul>

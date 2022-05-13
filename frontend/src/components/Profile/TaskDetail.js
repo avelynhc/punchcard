@@ -1,12 +1,11 @@
 import classes from "./TaskDetail.module.css";
 import { useEffect, useState } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
-const TaskDetail = () => {
-  const [taskDetail, setTaskDetail] = useState([]);
+const TaskDetail = (props) => {
+  const [taskDetail, setTaskDetail] = useState([null]);
   const BACKEND_API = "http://127.0.0.1:4000";
-  const params = useParams();
-  const taskName = params.taskName;
+  const taskName = props.params;
   const history = useHistory();
 
   useEffect(() => {
@@ -25,18 +24,13 @@ const TaskDetail = () => {
           }
         })
         .then((data) => {
-          // if (data[taskName][0].finish_time) {
-          //   const current_duration = FetchDurationHandler(taskName);
-          //   console.log(current_duration);
-          // }
-          // data[taskName][0].duration = current_duration.duration;
           setTaskDetail(data[taskName][0]);
         })
         .catch((err) => {
           console.log(err);
         });
     }
-  }, []);
+  }, [taskName]);
 
   // const fetchTaskHandler = async () => {
   //   let current_duration = [];
@@ -106,7 +100,6 @@ const TaskDetail = () => {
             setTaskDetail(null);
             alert(`Succesfully cancel ${taskName}`);
             history.push("/task");
-            return res.json();
           } else {
             alert("Error while deleting a task");
             throw new Error("Error while cancelling a task");
@@ -133,7 +126,6 @@ const TaskDetail = () => {
             setTaskDetail(null);
             alert(`Succesfully delete ${taskName}`);
             history.push("/task");
-            return res.json();
           } else {
             alert("Error while deleting a task");
             throw new Error("Error while deleting a task");

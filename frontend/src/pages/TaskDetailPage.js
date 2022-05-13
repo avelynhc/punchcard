@@ -4,7 +4,6 @@ import TaskDetail from '../components/Profile/TaskDetail';
 
 const TaskDetailPage = () => {
     const params = useParams();
-    // console.log(params.taskName)
     return <TaskDetail params={params.taskName} />
 }
 

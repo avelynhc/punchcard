@@ -3,11 +3,11 @@ import classes from './Task.module.css';
 const Task = (props) => {
   return (
     <li className={classes.task}>
-      <h2>{props.user_id}</h2>
-      <h2>{props.task_name}</h2>
-      <h2>{props.start_time}</h2>
-      <h2>{props.finish_time}</h2>
-      <h2>{props.duration}</h2>
+      <p>{props.user_id}</p>
+      <p>{props.task_name}</p>
+      <p>{props.start_time}</p>
+      <p>{props.finish_time}</p>
+      <p>{props.duration}</p>
     </li>
   );
 };

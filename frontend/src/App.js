@@ -51,10 +51,10 @@ const App = () => {
         <Route path="/auth" exact>
           <AuthPage />
         </Route>
-        <Route path="/task" exact>
+        <Route path="/tasks" exact>
           <UserProfile />
         </Route>
-        <Route path="/task/:taskName" exact>
+        <Route path="/tasks/:taskName" exact>
           <TaskDetailPage />
         </Route>
         <Route path="*">

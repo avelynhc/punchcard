@@ -5,7 +5,6 @@ const AuthContext = React.createContext({
   isLoggedIn: false,
   login: (token) => {},
   logout: () => {},
-  register: (token) => {}
 });
 
 const retrieveStoredToken = () => {
@@ -28,17 +27,11 @@ export const AuthContextProvider = (props) => {
     localStorage.setItem("token", token);
   };
 
-  const registerHandler = (token) => {
-    setToken(token);
-    localStorage.setItem("token", token);
-  }
-
   const contextValue = {
       token: token,
       isLoggedIn: userIsLoggedIn,
       login: loginHandler,
       logout: logoutHandler,
-      register: registerHandler
   };
   return (
       <AuthContext.Provider value={contextValue}>

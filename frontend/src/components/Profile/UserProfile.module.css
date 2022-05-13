@@ -48,8 +48,6 @@
 }
 
 button {
-  cursor: pointer;
-  font: inherit;
   color: white;
   border-radius: 20px;
   padding: 0.5rem 2.5rem;
