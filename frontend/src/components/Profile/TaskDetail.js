@@ -32,57 +32,6 @@ const TaskDetail = (props) => {
     }
   }, [taskName]);
 
-  // const fetchTaskHandler = async () => {
-  //   let current_duration = [];
-  //   try {
-  //     const token = localStorage.getItem("token");
-  //     if (token) {
-  //       const response = fetch(`${BACKEND_API}/task/${taskName}`, {
-  //         headers: {
-  //           Authorization: "Bearer " + token,
-  //         },
-  //       });
-  //       if (!response.ok) {
-  //         throw new Error(`Cannot fetch task detail of ${taskName}`);
-  //       }
-  //       const data = await response.json();
-  //       if (data[taskName][0].finish_time) {
-  //         current_duration = await FetchDurationHandler(taskName);
-  //         console.log(current_duration);
-  //       }
-  //       data[taskName][0].duration = current_duration.duration;
-  //       setTaskDetail(data[taskName][0]);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // const FetchDurationHandler = (task) => {
-  //   const token = localStorage.getItem("token");
-  //   if (token) {
-  //     return fetch(`${BACKEND_API}/task/${task}/duration`, {
-  //       headers: {
-  //         Authorization: "Bearer " + token,
-  //       },
-  //     })
-  //       .then((res) => {
-  //         if (res.ok) {
-  //           return res.json();
-  //         } else {
-  //           throw new Error("Cannot fetch task duration");
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchTaskHandler();
-  // }, []);
-
   const cancelHandler = (taskName) => {
     const token = localStorage.getItem("token");
     if (token) {
