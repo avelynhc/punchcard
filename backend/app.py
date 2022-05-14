@@ -18,6 +18,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
 )
 
 app.config["JWT_SECRET_KEY"] = "avelyn"
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = False
 api = Api(app)
 jwt = JWTManager(app)
 
