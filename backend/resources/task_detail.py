@@ -111,6 +111,22 @@ class TaskDetailWithCancel(Resource):
             return {"message": "internal server error"}, 500
 
 
+class TaskDetailWithDelete(Resource):
+    @jwt_required()
+    def post(self, task_name):
+        try:
+            current_user = TaskDetailModel.find_current_user()
+        except:
+            return {"message": "not able to verify user_id"}, 401
+        try:
+            task_detail = TaskDetailModel.find_finished_by_user_id(current_user.id, task_name)
+        except:
+            return {"message": "An error occured while deleting a task"}, 500
+        if task_detail:
+            task_detail.delete_from_db()
+            return task_detail.json()
+        return {"message": "internal server error"}, 500
+
 class TaskDetailList(Resource):
     @jwt_required()
     def get(self):

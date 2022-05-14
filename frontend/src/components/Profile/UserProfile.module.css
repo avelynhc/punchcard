@@ -24,7 +24,7 @@
   background: rgb(25, 136, 25);
   border: 1px solid rgb(25, 136, 25);
   color: #fff;
-  padding: 0.5rem 2rem;
+  padding: 0.3rem 2rem;
   border-radius: 20px;
   display: inline-block;
   box-sizing: border-box;
@@ -35,7 +35,7 @@
   background: rgb(219, 154, 32);
   border: 1px solid rgb(219, 154, 32);
   color: #fff;
-  padding: 0.5rem 2rem;
+  padding: 0.3rem 2rem;
   border-radius: 20px;
   display: inline-block;
   box-sizing: border-box;
@@ -43,6 +43,17 @@
 }
 
 .error {
-  color: red;
+  color: #FF0000;
   font-weight: bold;
+}
+
+button {
+  color: #fff;
+  border-radius: 20px;
+  padding: 0.5rem 2.5rem;
+  margin: 0.3rem
+}
+
+.data p {
+  margin: 0.5rem;
 }

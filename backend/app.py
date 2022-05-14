@@ -8,7 +8,7 @@ from flask_cors import CORS
 
 from db.db import db
 from resources.user import UserRegister, UserLogin, UserModel, RetrieveUser
-from resources.task_detail import TaskDetail, TaskDetailList, TaskDetailWithFinish, TaskDetailWithCancel, TaskDuration
+from resources.task_detail import TaskDetail, TaskDetailList, TaskDetailWithFinish, TaskDetailWithCancel, TaskDetailWithDelete, TaskDuration
 
 app = Flask(__name__)
 CORS(app)
@@ -58,6 +58,7 @@ api.add_resource(TaskDuration, "/task/<string:task_name>/duration")
 api.add_resource(TaskDetail, "/task/<string:task_name>")
 api.add_resource(TaskDetailWithFinish, "/task/<string:task_name>/finish")
 api.add_resource(TaskDetailWithCancel, "/task/<string:task_name>/cancel")
+api.add_resource(TaskDetailWithDelete, "/task/<string:task_name>/delete")
 api.add_resource(TaskDetailList, "/tasks")
 
 if __name__ == "__main__":

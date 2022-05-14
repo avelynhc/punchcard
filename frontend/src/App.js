@@ -5,6 +5,7 @@ import UserProfile from "./components/Profile/UserProfile";
 import AuthPage from "./pages/AuthPage";
 import HomePage from "./pages/HomePage";
 import AuthContext from "./store/auth-context";
+import TaskDetailPage from "./pages/TaskDetailPage";
 
 const BACKEND_API = "http://127.0.0.1:4000";
 
@@ -22,9 +23,9 @@ const App = () => {
       })
         .then((data) => {
           if (data.ok) {
-            return data.json()
+            return data.json();
           } else {
-            throw new Error("failed to get me information")
+            throw new Error("failed to get me information");
           }
         })
         .then((resp) => {
@@ -50,8 +51,11 @@ const App = () => {
         <Route path="/auth" exact>
           <AuthPage />
         </Route>
-        <Route path="/profile" exact>
+        <Route path="/tasks" exact>
           <UserProfile />
+        </Route>
+        <Route path="/tasks/:taskName" exact>
+          <TaskDetailPage />
         </Route>
         <Route path="*">
           <Redirect to="/" />
