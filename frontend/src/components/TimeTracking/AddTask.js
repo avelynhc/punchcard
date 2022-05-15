@@ -9,7 +9,7 @@ const AddTask = ({ onAddTask }) => {
   const submitHandler = (event) => {
     event.preventDefault();
     onAddTask(taskNameRef.current.value);
-    isTaskStarted ? setIsTaskStarted(true) : setIsTaskStarted(false);
+    setIsTaskStarted(true);
   };
 
   // TODO: add disabled state to the submit button

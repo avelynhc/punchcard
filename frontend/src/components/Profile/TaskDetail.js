@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 
 const TaskDetail = (props) => {
   const [taskDetail, setTaskDetail] = useState([null]);
+  const [isFinished, setIsFinished] = useState(false);
   const BACKEND_API = "http://127.0.0.1:4000";
   const taskName = props.params;
   const history = useHistory();
@@ -52,10 +53,6 @@ const TaskDetail = (props) => {
     }
   };
 
-  useEffect(() => {
-    fetchTaskHandler();
-  }, [taskName]);
-
   const cancelHandler = (taskName) => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -72,7 +69,7 @@ const TaskDetail = (props) => {
           if (res.ok) {
             setTaskDetail(null);
             alert(`Succesfully cancel ${taskName}`);
-            history.push("/task");
+            history.push("/tasks");
           } else {
             alert("Error while deleting a task");
             throw new Error("Error while cancelling a task");
@@ -98,7 +95,7 @@ const TaskDetail = (props) => {
           if (res.ok) {
             setTaskDetail(null);
             alert(`Succesfully delete ${taskName}`);
-            history.push("/task");
+            history.push("/tasks");
           } else {
             alert("Error while deleting a task");
             throw new Error("Error while deleting a task");
@@ -107,6 +104,38 @@ const TaskDetail = (props) => {
         .catch((err) => console.log(err));
     }
   };
+
+  const finishTaskHandler = (ongoingTask) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      fetch(`${BACKEND_API}/task/${ongoingTask}/finish`, {
+        method: "POST",
+        body: JSON.stringify(ongoingTask),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
+        .then((res) => {
+          if (res.ok) {
+            setIsFinished(true);
+            return res.json();
+          } else {
+            throw new Error(`Failed to finish ${ongoingTask}`);
+          }
+        })
+        .then(() => {
+          history.push("/tasks");
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    }
+  };
+
+  useEffect(() => {
+    fetchTaskHandler();
+  }, [taskName]);
 
   return (
     <>
@@ -131,6 +160,14 @@ const TaskDetail = (props) => {
             onClick={() => deleteHandler(`${taskDetail.task_name}`)}
           >
             Delete
+          </button>
+        )}
+        {!taskDetail.finish_time && (
+          <button
+            className={classes.finish}
+            onClick={() => finishTaskHandler(`${taskDetail.task_name}`)}
+          >
+            Finish Current Task
           </button>
         )}
       </section>
