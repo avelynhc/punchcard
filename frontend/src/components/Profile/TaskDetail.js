@@ -8,10 +8,10 @@ const TaskDetail = (props) => {
   const taskName = props.params;
   const history = useHistory();
 
-  useEffect(() => {
+  const FetchDurationHandler = (taskName) => {
     const token = localStorage.getItem("token");
     if (token) {
-      fetch(`${BACKEND_API}/task/${taskName}`, {
+      return fetch(`${BACKEND_API}/task/${taskName}/duration`, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -20,16 +20,40 @@ const TaskDetail = (props) => {
           if (res.ok) {
             return res.json();
           } else {
-            throw new Error(`Cannot fetch task detail of ${taskName}`);
+            throw new Error("Cannot fetch task duration");
           }
-        })
-        .then((data) => {
-          setTaskDetail(data[taskName][0]);
         })
         .catch((err) => {
           console.log(err);
         });
     }
+  };
+
+  const fetchTaskHandler = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (token) {
+        const response = await fetch(`${BACKEND_API}/task/${taskName}`, {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        });
+        if (!response.ok)
+          throw new Error(`Cannot fetch task detail of ${taskName}`);
+        const data = await response.json();
+        if (data[taskName][0].finish_time) {
+          const current_duration = await FetchDurationHandler(taskName);
+          data[taskName][0].duration = current_duration.duration;
+        }
+        setTaskDetail(data[taskName][0]);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchTaskHandler();
   }, [taskName]);
 
   const cancelHandler = (taskName) => {
