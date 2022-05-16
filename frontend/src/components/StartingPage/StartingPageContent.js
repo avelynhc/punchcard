@@ -7,6 +7,7 @@ import Timer from "../UI/Timer";
 const BACKEND_API = "http://127.0.0.1:4000";
 const StartingPageContent = () => {
   const [isAdded, setIsAdded] = useState(false);
+  const [error, setError] = useState(null);
 
   const addTaskHandler = (newTask) => {
     const url = isAdded
@@ -28,11 +29,12 @@ const StartingPageContent = () => {
           setIsAdded(true);
           return res.json();
         } else {
-          throw new Error("failed to add a new task");
+          throw new Error("Failed to add a new task");
         }
       })
       .catch((err) => {
         console.log(err.message);
+        setError(err.message);
       });
   };
 
@@ -44,6 +46,7 @@ const StartingPageContent = () => {
       <section>
         <AddTask onAddTask={addTaskHandler} />
         {isAdded && <Timer />}
+        {!isAdded && <p className={classes.warning}>{error}</p>}
       </section>
     </>
   );
