@@ -42,7 +42,7 @@ const TaskDetail = (props) => {
         if (!response.ok)
           throw new Error(`Cannot fetch task detail of ${taskName}`);
         const data = await response.json();
-        if (data[taskName][0].finish_time) {
+        if (data[taskName] && data[taskName].length >= 1 && data[taskName][0].finish_time) {
           const current_duration = await FetchDurationHandler(taskName);
           data[taskName][0].duration = current_duration.duration;
         }
