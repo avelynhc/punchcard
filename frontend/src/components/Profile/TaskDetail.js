@@ -5,6 +5,13 @@ import { useHistory } from "react-router-dom";
 const TaskDetail = (props) => {
   const [taskDetail, setTaskDetail] = useState([null]);
   const [isFinished, setIsFinished] = useState(false);
+  const [timer, setTimer] = useState({
+    days: 0,
+    hours: 0,
+    mins: 0,
+    secs: 0,
+  });
+
   const BACKEND_API = "http://127.0.0.1:4000";
   const taskName = props.params;
   const history = useHistory();
@@ -42,7 +49,11 @@ const TaskDetail = (props) => {
         if (!response.ok)
           throw new Error(`Cannot fetch task detail of ${taskName}`);
         const data = await response.json();
-        if (data[taskName] && data[taskName].length >= 1 && data[taskName][0].finish_time) {
+        if (
+          data[taskName] &&
+          data[taskName].length >= 1 &&
+          data[taskName][0].finish_time
+        ) {
           const current_duration = await FetchDurationHandler(taskName);
           data[taskName][0].duration = current_duration.duration;
         }
@@ -135,7 +146,31 @@ const TaskDetail = (props) => {
 
   useEffect(() => {
     fetchTaskHandler();
-  }, [taskName]);
+    const interval = setInterval(() => {
+      let timeDiff = new Date().getTime() - taskDetail.start_time * 1000;
+
+      timeDiff = Math.floor(timeDiff / 1000);
+      let secs_diff = timeDiff % 60;
+      timeDiff = Math.floor(timeDiff / 60);
+      let mins_diff = timeDiff % 60;
+      timeDiff = Math.floor(timeDiff / 60);
+      let hours_diff = timeDiff % 24;
+      timeDiff = Math.floor(timeDiff / 24);
+      let days_diff = timeDiff % 24;
+      timeDiff = Math.floor(timeDiff / 24);
+
+      setTimer({
+        days: days_diff,
+        hours: hours_diff,
+        mins: mins_diff,
+        secs: secs_diff
+      });
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [taskName, taskDetail.start_time]);
 
   return (
     <>
@@ -145,6 +180,11 @@ const TaskDetail = (props) => {
         {taskDetail.start_time && <p>start time: {taskDetail.start_time}</p>}
         {taskDetail.finish_time && <p>finish time: {taskDetail.finish_time}</p>}
         {taskDetail.finish_time && <p>duration: {taskDetail.duration}</p>}
+        {!taskDetail.finish_time && (
+          <button className={classes.timer}>
+            Timer: {`${timer.days}day(s) ${timer.hours}hour(s) ${timer.mins}min(s) ${timer.secs}sec(s)`}
+          </button>
+        )}
         {!taskDetail.finish_time ? (
           <button
             className={classes.cancel}

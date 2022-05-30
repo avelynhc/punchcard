@@ -32,3 +32,9 @@ button {
     margin: 0.5rem;
     padding: 0.5rem;
 }
+
+.timer {
+  background-color: #0ca4db;
+  border: 1px solid #0ca4db;
+  margin: 0.5rem;
+}
