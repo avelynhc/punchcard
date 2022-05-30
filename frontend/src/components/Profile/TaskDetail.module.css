@@ -23,6 +23,10 @@ button {
   border: 1px solid #db3c0c;
 }
 
+.finish {
+  margin: 0.5rem;
+}
+
 .details {
     background-color: rgb(30, 210, 150);
     margin: 0.5rem;
