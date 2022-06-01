@@ -3,7 +3,6 @@ import classes from "./AddTask.module.css";
 
 const AddTask = ({ onAddTask }) => {
   const taskNameRef = useRef("");
-
   const [isTaskStarted, setIsTaskStarted] = useState(false);
 
   const submitHandler = (event) => {
