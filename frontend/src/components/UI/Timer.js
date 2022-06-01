@@ -6,13 +6,11 @@ const Timer = () => {
   const { seconds, minutes, hours, days } = useStopwatch({ autoStart: true });
 
   return (
-    <div>
-      <div className={classes.timer}>
-        {days !== 0 && <span>{days}day </span>}
-        {hours !== 0 && <span>{hours}hr </span>}
-        {minutes !== 0 && <span>{minutes}min </span>}
-        {seconds !== 0 && <span>{seconds}sec</span>}
-      </div>
+    <div className={classes.timer}>
+      {days !== 0 && <span>{days}day </span>}
+      {hours !== 0 && <span>{hours}hr </span>}
+      {minutes !== 0 && <span>{minutes}min </span>}
+      {seconds !== 0 && <span>{seconds}sec</span>}
     </div>
   );
 };

@@ -150,13 +150,13 @@ const TaskDetail = (props) => {
       let timeDiff = new Date().getTime() - taskDetail.start_time * 1000;
 
       timeDiff = Math.floor(timeDiff / 1000);
-      let secs_diff = timeDiff % 60;
+      const secs_diff = timeDiff % 60;
       timeDiff = Math.floor(timeDiff / 60);
-      let mins_diff = timeDiff % 60;
+      const mins_diff = timeDiff % 60;
       timeDiff = Math.floor(timeDiff / 60);
-      let hours_diff = timeDiff % 24;
+      const hours_diff = timeDiff % 24;
       timeDiff = Math.floor(timeDiff / 24);
-      let days_diff = timeDiff % 24;
+      const days_diff = timeDiff % 24;
       timeDiff = Math.floor(timeDiff / 24);
 
       setTimer({

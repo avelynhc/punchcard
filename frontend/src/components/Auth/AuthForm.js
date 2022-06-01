@@ -57,8 +57,7 @@ const AuthForm = (props) => {
           history.replace("/");
         }
         else {
-          setMessage(data.message)
-          authCtx.register(data.access_token);
+          setMessage(data.message);
           history.replace("/auth");
         } 
       })
