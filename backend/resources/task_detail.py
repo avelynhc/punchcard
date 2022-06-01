@@ -140,5 +140,9 @@ class TaskDetailList(Resource):
             return {"message": "An error occured to get the task detail"}, 500
         if task_detail:
             task_list = [task.json() for task in task_detail]
+            for task in task_list:
+                if not task["finish_time"]: 
+                    task["finish_time"] = 0
+            task_list.sort(key=lambda x: x.get("finish_time"))
             return {"task_detail" : task_list}, 200
         return {"message": "You do not have any task in your list yet"}, 200

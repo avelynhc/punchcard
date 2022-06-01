@@ -81,9 +81,9 @@ const UserProfile = () => {
                   task name: {task.task_name}
                 </Link>
                 <p>start time: {task.start_time}</p>
-                {task.finish_time && <p>finish time: {task.finish_time}</p>}
+                {task.finish_time > 0 && <p>finish time: {task.finish_time}</p>}
                 {task.duration && <p>duration: {task.duration}</p>}
-                {task.finish_time ? (
+                {task.finish_time > 0 ? (
                   <p className={classes.complete}>Completed</p>
                 ) : (
                   <p className={classes.pending}>Not Completed</p>
