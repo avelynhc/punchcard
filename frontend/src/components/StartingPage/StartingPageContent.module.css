@@ -7,13 +7,20 @@
   font-size: 2rem;
 }
 
-.starting img {
-  align-items: center;
-  margin: 1rem auto;
-  width: 80%;
-  height: auto;
+.link {
+  font: inherit;
+  cursor: pointer;
+  background: #230052;
+  border: 1px solid #230052;
+  color: white;
+  padding: 0.6rem 2rem;
+  border-radius: 20px;
+  outline: none;
+  text-decoration: none;
 }
 
-.warning {
-  color: #FF6347;
+.link:hover,
+.link:active {
+  background-color: #460897;
+  border-color: #460897;
 }

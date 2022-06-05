@@ -6,6 +6,7 @@ import AuthPage from "./pages/AuthPage";
 import HomePage from "./pages/HomePage";
 import AuthContext from "./store/auth-context";
 import TaskDetailPage from "./pages/TaskDetailPage";
+import AddTaskPage from "./pages/AddTaskPage";
 
 const BACKEND_API = "http://127.0.0.1:4000";
 
@@ -56,6 +57,9 @@ const App = () => {
         </Route>
         <Route path="/tasks/:taskName" exact>
           <TaskDetailPage />
+        </Route>
+        <Route path="/new" exact>
+          <AddTaskPage />
         </Route>
         <Route path="*">
           <Redirect to="/" />
