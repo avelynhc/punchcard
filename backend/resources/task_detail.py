@@ -3,6 +3,7 @@ from flask_restful import Resource
 from models.task_detail import TaskDetailModel
 from flask_jwt_extended import jwt_required
 import time
+import operator
 
 class TaskDuration(Resource):
     @jwt_required()
@@ -140,5 +141,6 @@ class TaskDetailList(Resource):
             return {"message": "An error occured to get the task detail"}, 500
         if task_detail:
             task_list = [task.json() for task in task_detail]
+            task_list.sort(key=operator.itemgetter("start_time"))
             return {"task_detail" : task_list}, 200
         return {"message": "You do not have any task in your list yet"}, 200
