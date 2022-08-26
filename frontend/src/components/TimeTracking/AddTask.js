@@ -3,12 +3,13 @@ import classes from "./AddTask.module.css";
 
 const AddTask = ({ onAddTask }) => {
   const taskNameRef = useRef("");
-  const [isTaskStarted, setIsTaskStarted] = useState(false);
+  const [isSubmitted, setSubmitted] = useState(false);
 
   const submitHandler = (event) => {
     event.preventDefault();
     onAddTask(taskNameRef.current.value);
-    setIsTaskStarted(true);
+    setSubmitted(true);
+    console.log("add task button was clicked!")
   };
 
   // TODO: add disabled state to the submit button
@@ -21,9 +22,9 @@ const AddTask = ({ onAddTask }) => {
       <section>
         <button
           type="submit"
-          className={classes.toggle}
+          disabled={isSubmitted}
         >
-          {isTaskStarted ? "Finish Task" : "Add Task"}
+          Add Task
         </button>
       </section>
     </form>
