@@ -14,7 +14,7 @@ const MainNavigation = () => {
 
   return (
     <header className={classes.header}>
-      <Link to='/'>
+      <Link to='/home'>
         <div className={classes.logo}>PunchCard</div>
       </Link>
       <nav>

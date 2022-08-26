@@ -41,7 +41,7 @@ const StartingPageContent = () => {
   return (
     <>
       <section className={classes.starting}>
-        <h1>Please enter a task you want to start</h1>
+        <h1>Please Enter a Task Name</h1>
       </section>
       <section>
         <AddTask onAddTask={addTaskHandler} />

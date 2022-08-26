@@ -1,5 +1,6 @@
 h2 {
   margin: 1.5rem;
+  text-align: center;
 }
 
 .details p {
@@ -28,9 +29,9 @@ button {
 }
 
 .details {
-    background-color: rgb(30, 210, 150);
-    margin: 0.5rem;
-    padding: 0.5rem;
+  background-color: rgb(30, 210, 150);
+  margin: 0.5rem;
+  padding: 0.5rem;
 }
 
 .timer {

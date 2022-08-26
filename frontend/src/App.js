@@ -46,7 +46,7 @@ const App = () => {
   return (
     <Layout>
       <Switch>
-        <Route path="/" exact>
+        <Route path="/home" exact>
           <HomePage />
         </Route>
         <Route path="/auth" exact>
@@ -62,7 +62,7 @@ const App = () => {
           <AddTaskPage />
         </Route>
         <Route path="*">
-          <Redirect to="/" />
+          <Redirect to="/home" />
         </Route>
       </Switch>
     </Layout>

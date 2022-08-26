@@ -9,10 +9,14 @@ const UserProfile = () => {
   const [tasks, setTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const getToken = () => {
+    return localStorage.getItem("token");
+  };
+
   const fetchTasksHandler = async () => {
     setIsLoading(true);
     try {
-      const token = localStorage.getItem("token");
+      const token = getToken();
       if (token) {
         const response = await fetch(`${BACKEND_API}/tasks`, {
           headers: {
@@ -40,23 +44,23 @@ const UserProfile = () => {
   };
 
   const FetchDurationHandler = (taskName) => {
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (token) {
       return fetch(`${BACKEND_API}/task/${taskName}/duration`, {
         headers: {
           Authorization: "Bearer " + token,
         },
       })
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          } else {
-            throw new Error("Cannot fetch task duration");
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw new Error("Cannot fetch task duration");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     }
   };
 
@@ -68,10 +72,7 @@ const UserProfile = () => {
     <React.Fragment>
       <section className={classes.profile}>
         <h2>Your User Profile</h2>
-        <h3>Reports</h3>
-        <section>
-          <button onClick={fetchTasksHandler}>Fetch Task Details</button>
-        </section>
+        <h3>Task Reports</h3>
         {isLoading && <p>Loading...</p>}
         {tasks.length > 0 ? (
           <ul className={classes.data}>
@@ -84,9 +85,9 @@ const UserProfile = () => {
                 {task.finish_time > 0 && <p>finish time: {task.finish_time}</p>}
                 {task.duration && <p>duration: {task.duration}</p>}
                 {task.finish_time > 0 ? (
-                  <p className={classes.complete}>Completed</p>
+                  <p className={classes.complete}>Complete</p>
                 ) : (
-                  <p className={classes.pending}>Not Completed</p>
+                  <p className={classes.pending}>In Progress</p>
                 )}
               </li>
             ))}

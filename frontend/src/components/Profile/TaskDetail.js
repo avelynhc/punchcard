@@ -4,7 +4,6 @@ import { useHistory } from "react-router-dom";
 
 const TaskDetail = (props) => {
   const [taskDetail, setTaskDetail] = useState([null]);
-  const [isFinished, setIsFinished] = useState(false);
   const [timer, setTimer] = useState({
     days: 0,
     hours: 0,
@@ -16,8 +15,12 @@ const TaskDetail = (props) => {
   const taskName = props.params;
   const history = useHistory();
 
+  const getToken = () => {
+    return localStorage.getItem("token");
+  };
+
   const FetchDurationHandler = (taskName) => {
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (token) {
       return fetch(`${BACKEND_API}/task/${taskName}/duration`, {
         headers: {
@@ -39,7 +42,7 @@ const TaskDetail = (props) => {
 
   const fetchTaskHandler = async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = getToken();
       if (token) {
         const response = await fetch(`${BACKEND_API}/task/${taskName}`, {
           headers: {
@@ -65,7 +68,7 @@ const TaskDetail = (props) => {
   };
 
   const cancelHandler = (taskName) => {
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (token) {
       fetch(`${BACKEND_API}/task/${taskName}/cancel`, {
         method: "POST",
@@ -76,22 +79,22 @@ const TaskDetail = (props) => {
           Authorization: "Bearer " + token,
         },
       })
-        .then((res) => {
-          if (res.ok) {
-            setTaskDetail(null);
-            alert(`Succesfully cancel ${taskName}`);
-            history.push("/tasks");
-          } else {
-            alert("Error while deleting a task");
-            throw new Error("Error while cancelling a task");
-          }
-        })
-        .catch((err) => console.log(err));
+      .then((res) => {
+        if (res.ok) {
+          setTaskDetail(null);
+          alert(`Successfully cancel ${taskName}`);
+          history.push("/tasks");
+        } else {
+          alert("Error while cancelling a task");
+          throw new Error("Error while cancelling a task");
+        }
+      })
+      .catch((err) => console.log(err));
     }
   };
 
   const deleteHandler = (taskName) => {
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (token) {
       fetch(`${BACKEND_API}/task/${taskName}/delete`, {
         method: "POST",
@@ -102,22 +105,22 @@ const TaskDetail = (props) => {
           Authorization: "Bearer " + token,
         },
       })
-        .then((res) => {
-          if (res.ok) {
-            setTaskDetail(null);
-            alert(`Succesfully delete ${taskName}`);
-            history.push("/tasks");
-          } else {
-            alert("Error while deleting a task");
-            throw new Error("Error while deleting a task");
-          }
-        })
-        .catch((err) => console.log(err));
+      .then((res) => {
+        if (res.ok) {
+          setTaskDetail(null);
+          alert(`Successfully delete ${taskName}`);
+          history.push("/tasks");
+        } else {
+          alert("Error while deleting a task");
+          throw new Error("Error while deleting a task");
+        }
+      })
+      .catch((err) => console.log(err));
     }
   };
 
   const finishTaskHandler = (ongoingTask) => {
-    const token = localStorage.getItem("token");
+    const token = getToken();
     if (token) {
       fetch(`${BACKEND_API}/task/${ongoingTask}/finish`, {
         method: "POST",
@@ -129,7 +132,6 @@ const TaskDetail = (props) => {
       })
         .then((res) => {
           if (res.ok) {
-            setIsFinished(true);
             return res.json();
           } else {
             throw new Error(`Failed to finish ${ongoingTask}`);
@@ -174,7 +176,7 @@ const TaskDetail = (props) => {
 
   return (
     <>
-      <h2>Welcome to task detail page!</h2>
+      <h2>Task Detail Page</h2>
       <section className={classes.details}>
         {taskName && <p>task name: {taskName}</p>}
         {taskDetail.start_time && <p>start time: {taskDetail.start_time}</p>}

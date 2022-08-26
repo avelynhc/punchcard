@@ -4,7 +4,7 @@ import AuthContext from "../../store/auth-context";
 
 import classes from "./AuthForm.module.css";
 
-const AuthForm = (props) => {
+const AuthForm = () => {
   const usernameInputRef = useRef();
   const passwordInputRef = useRef();
   const [isLogin, setIsLogin] = useState(true);

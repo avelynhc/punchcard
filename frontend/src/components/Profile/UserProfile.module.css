@@ -21,8 +21,8 @@
 }
 
 .complete {
-  background: rgb(25, 136, 25);
-  border: 1px solid rgb(25, 136, 25);
+  background: rgb(37, 171, 6);
+  border: 1px solid rgb(37, 171, 6);
   color: #fff;
   padding: 0.3rem 2rem;
   border-radius: 20px;
@@ -32,8 +32,8 @@
 }
 
 .pending {
-  background: rgb(219, 154, 32);
-  border: 1px solid rgb(219, 154, 32);
+  background: rgb(197, 4, 50);
+  border: 1px solid rgb(197, 4, 50);
   color: #fff;
   padding: 0.3rem 2rem;
   border-radius: 20px;
