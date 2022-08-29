@@ -9,7 +9,6 @@ const AddTask = ({ onAddTask }) => {
     event.preventDefault();
     onAddTask(taskNameRef.current.value);
     setSubmitted(true);
-    console.log("add task button was clicked!")
   };
 
   return (
