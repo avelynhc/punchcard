@@ -41,7 +41,7 @@ class TaskDuration(Resource):
                 return {"duration": duration}, 200
             return {"message": "you do not have task '{}' in the time range given".format(task_name)}, 404
         except:
-            return {"message": "an error occured to get the task detail"}, 500
+            return {"message": "an error occurred to get the task detail"}, 500
 
 
 class TaskDetail(Resource):
@@ -54,7 +54,7 @@ class TaskDetail(Resource):
         try:
             task_detail = TaskDetailModel.find_by_user_id(current_user.id, task_name)
         except:
-            return {"message": "An error occured to get the task detail"}, 500
+            return {"message": "An error occurred to get the task detail"}, 500
         if task_detail:
             task_list = [task.json() for task in task_detail]
             return {task_name: task_list}
@@ -69,7 +69,7 @@ class TaskDetail(Resource):
         try:
             task_detail = TaskDetailModel.find_unfinished_by_user_id(current_user.id, task_name)
         except:
-            return {"message": "an error occured to get the task detail"}, 500
+            return {"message": "an error occurred to get the task detail"}, 500
         if task_detail is not None:
             return {"message": "you need to finish task '{}' first to be able to start a new project".format(task_name)}, 404
         new_task = TaskDetailModel(current_user.id, task_name, int(time.time()))
@@ -87,7 +87,7 @@ class TaskDetailWithFinish(Resource):
         try:
             task_detail = TaskDetailModel.find_unfinished_by_user_id(current_user.id, task_name)
         except:
-            return {"message": "an error occured to get the task detail"}, 500
+            return {"message": "an error occurred to get the task detail"}, 500
         if task_detail is None:
             return {"message": "you do not have unfinished task named '{}'".format(task_name)}, 404
         task_detail.finish_time = int(time.time())
@@ -122,7 +122,7 @@ class TaskDetailWithDelete(Resource):
         try:
             task_detail = TaskDetailModel.find_finished_by_user_id(current_user.id, task_name)
         except:
-            return {"message": "An error occured while deleting a task"}, 500
+            return {"message": "An error occurred while deleting a task"}, 500
         if task_detail:
             task_detail.delete_from_db()
             return task_detail.json()
@@ -138,7 +138,7 @@ class TaskDetailList(Resource):
         try:
             task_detail = TaskDetailModel.query.filter_by(user_id=current_user.id).all()
         except:
-            return {"message": "An error occured to get the task detail"}, 500
+            return {"message": "An error occurred to get the task detail"}, 500
         if task_detail:
             task_list = [task.json() for task in task_detail]
             task_list.sort(key=operator.itemgetter("start_time"))
