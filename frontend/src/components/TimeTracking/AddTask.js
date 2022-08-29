@@ -12,7 +12,6 @@ const AddTask = ({ onAddTask }) => {
     console.log("add task button was clicked!")
   };
 
-  // TODO: add disabled state to the submit button
   return (
     <form onSubmit={submitHandler}>
       <div className={classes.control}>

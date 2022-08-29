@@ -38,7 +38,7 @@ section {
 
 button:disabled {
   cursor: not-allowed;
-  background: #4b4949 !important;
+  background: #4b4949;
   border: 1px solid #4b4949;
 }
 
