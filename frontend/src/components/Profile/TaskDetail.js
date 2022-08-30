@@ -1,10 +1,17 @@
 import classes from "./TaskDetail.module.css";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import SimpleDateTime  from 'react-simple-timestamp-to-date';
 
 const TaskDetail = (props) => {
   const [taskDetail, setTaskDetail] = useState([null]);
   const [timer, setTimer] = useState({
+    days: 0,
+    hours: 0,
+    mins: 0,
+    secs: 0,
+  });
+  const [duration, setDuration] = useState({
     days: 0,
     hours: 0,
     mins: 0,
@@ -61,6 +68,22 @@ const TaskDetail = (props) => {
           data[taskName][0].duration = current_duration.duration;
         }
         setTaskDetail(data[taskName][0]);
+
+        let durationDiff = data[taskName][0].duration;
+        const secs_diff = durationDiff % 60;
+        durationDiff = Math.floor(durationDiff / 60);
+        const mins_diff = durationDiff % 60;
+        durationDiff = Math.floor(durationDiff / 60);
+        const hours_diff = durationDiff % 24;
+        durationDiff = Math.floor(durationDiff / 24);
+        const days_diff = durationDiff % 24;
+
+        setDuration({
+          days: days_diff,
+          hours: hours_diff,
+          mins: mins_diff,
+          secs: secs_diff
+        });
       }
     } catch (err) {
       console.log(err);
@@ -159,7 +182,6 @@ const TaskDetail = (props) => {
       const hours_diff = timeDiff % 24;
       timeDiff = Math.floor(timeDiff / 24);
       const days_diff = timeDiff % 24;
-      timeDiff = Math.floor(timeDiff / 24);
 
       setTimer({
         days: days_diff,
@@ -179,9 +201,9 @@ const TaskDetail = (props) => {
       <h2>Task Detail Page</h2>
       <section className={classes.details}>
         {taskName && <p>task name: {taskName}</p>}
-        {taskDetail.start_time && <p>start time: {taskDetail.start_time}</p>}
-        {taskDetail.finish_time && <p>finish time: {taskDetail.finish_time}</p>}
-        {taskDetail.finish_time && <p>duration: {taskDetail.duration}</p>}
+        {taskDetail.start_time && <p>start time: <SimpleDateTime dateFormat="DMY" dateSeparator="/"  timeSeparator=":">{taskDetail.start_time}</SimpleDateTime></p>}
+        {taskDetail.finish_time && <p>finish time: <SimpleDateTime dateFormat="DMY" dateSeparator="/"  timeSeparator=":">{taskDetail.finish_time}</SimpleDateTime></p>}
+        {taskDetail.finish_time && <p>duration: {`${duration.days}day(s) ${duration.hours}hour(s) ${duration.mins}min(s) ${duration.secs}sec(s)`}</p>}
         {!taskDetail.finish_time && (
           <button className={classes.timer}>
             Timer: {`${timer.days}day(s) ${timer.hours}hour(s) ${timer.mins}min(s) ${timer.secs}sec(s)`}
