@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import SimpleDateTime  from 'react-simple-timestamp-to-date';
 
 import classes from "./UserProfile.module.css";
 
@@ -27,12 +28,28 @@ const UserProfile = () => {
           throw new Error("Cannot fetch task detail");
         }
         const data = await response.json();
+
         for (let i = 0; i < data.task_detail.length; i++) {
+          let secs_diff = 0;
+          let mins_diff = 0;
+          let hours_diff = 0;
+          let days_diff = 0;
+
           if (data.task_detail[i].finish_time) {
             const current_duration = await FetchDurationHandler(
               data.task_detail[i].task_name
             );
-            data.task_detail[i].duration = current_duration.duration;
+            let newDuration = data.task_detail[i].duration = current_duration.duration;
+
+            secs_diff = newDuration % 60;
+            newDuration = Math.floor(newDuration / 60);
+            mins_diff = newDuration % 60;
+            newDuration = Math.floor(newDuration / 60);
+            hours_diff = newDuration % 24;
+            newDuration = Math.floor(newDuration / 24);
+            days_diff = newDuration % 24;
+            if(days_diff === 0) data.task_detail[i].duration = `${hours_diff}hour(s) ${mins_diff}min(s) ${secs_diff}sec(s)`;
+            else data.task_detail[i].duration = `${days_diff}day(s) ${hours_diff}hour(s) ${mins_diff}min(s) ${secs_diff}sec(s)`;
           }
         }
         setTasks(data.task_detail);
@@ -81,8 +98,8 @@ const UserProfile = () => {
                 <Link to={`/tasks/${task.task_name}`}>
                   task name: {task.task_name}
                 </Link>
-                <p>start time: {task.start_time}</p>
-                {task.finish_time > 0 && <p>finish time: {task.finish_time}</p>}
+                <p>start time: <SimpleDateTime dateFormat="DMY" dateSeparator="/"  timeSeparator=":">{task.start_time}</SimpleDateTime></p>
+                {task.finish_time > 0 && <p>finish time: <SimpleDateTime dateFormat="DMY" dateSeparator="/"  timeSeparator=":">{task.finish_time}</SimpleDateTime></p>}
                 {task.duration && <p>duration: {task.duration}</p>}
                 {task.finish_time > 0 ? (
                   <p className={classes.complete}>Complete</p>
